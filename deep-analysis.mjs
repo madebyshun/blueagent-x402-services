@@ -1,10 +1,16 @@
 // deep-analysis.mjs
-// BlueAgent Deep Project Due Diligence CLI
+// BlueAgent Deep Project Due Diligence CLI - Fixed fetch
 
 import dotenv from 'dotenv';
 import { parseArgs } from 'util';
 
 dotenv.config();
+
+// Polyfill fetch if not available
+if (!globalThis.fetch) {
+  const fetch = await import('node-fetch');
+  globalThis.fetch = fetch.default;
+}
 
 const API_URL = 'https://blueagent-x402-services.bankr.bot/deep-analysis';
 
@@ -18,9 +24,7 @@ async function deepAnalysis(input) {
   console.log(`🔍 BlueAgent Deep Analysis on: ${input}`);
 
   try {
-    // Sử dụng dynamic import để tránh lỗi fetch
     const { wrapFetchWithPayment } = await import('x402-fetch');
-    const fetch = (await import('node-fetch')).default;
 
     const fetchWithPayment = wrapFetchWithPayment({
       payment: {
@@ -28,7 +32,6 @@ async function deepAnalysis(input) {
         token: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
       },
       settleAfterResponse: true,
-      fetch: fetch
     });
 
     const response = await fetchWithPayment(API_URL, {
@@ -43,7 +46,7 @@ async function deepAnalysis(input) {
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
+      const errorText = await response.text().catch(() => '');
       throw new Error(`HTTP ${response.status}: ${errorText}`);
     }
 
@@ -59,8 +62,8 @@ async function deepAnalysis(input) {
     console.log(`Rug Probability: ${data.rugProbability}%`);
     console.log(`Recommendation : ${data.recommendation}`);
 
-    console.log('\n📊 Category Scores:');
     if (data.categories) {
+      console.log('\n📊 Category Scores:');
       Object.entries(data.categories).forEach(([key, value]) => {
         console.log(`  ${key.padEnd(15)}: ${value}`);
       });
@@ -78,8 +81,8 @@ async function deepAnalysis(input) {
 
   } catch (error) {
     console.error('\n❌ Error:', error.message);
-    if (error.message.includes('payment') || error.message.includes('0x')) {
-      console.error('💰 Please make sure you have enough USDC and wallet is connected.');
+    if (error.message.toLowerCase().includes('payment')) {
+      console.error('💰 Please make sure you have enough USDC in your wallet.');
     }
   }
 }
