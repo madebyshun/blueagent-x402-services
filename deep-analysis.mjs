@@ -1,16 +1,11 @@
 // deep-analysis.mjs
-// BlueAgent Deep Project Due Diligence CLI - Fixed fetch
+// BlueAgent Deep Project Due Diligence CLI - Using axios to avoid fetch issues
 
 import dotenv from 'dotenv';
 import { parseArgs } from 'util';
+import axios from 'axios';
 
 dotenv.config();
-
-// Polyfill fetch if not available
-if (!globalThis.fetch) {
-  const fetch = await import('node-fetch');
-  globalThis.fetch = fetch.default;
-}
 
 const API_URL = 'https://blueagent-x402-services.bankr.bot/deep-analysis';
 
@@ -24,6 +19,23 @@ async function deepAnalysis(input) {
   console.log(`🔍 BlueAgent Deep Analysis on: ${input}`);
 
   try {
+    // Create a fetch-compatible function using axios
+    const customFetch = async (url, options = {}) => {
+      const response = await axios({
+        url,
+        method: options.method || 'GET',
+        headers: options.headers,
+        data: options.body,
+      });
+
+      return {
+        ok: response.status >= 200 && response.status < 300,
+        status: response.status,
+        json: async () => response.data,
+        text: async () => JSON.stringify(response.data)
+      };
+    };
+
     const { wrapFetchWithPayment } = await import('x402-fetch');
 
     const fetchWithPayment = wrapFetchWithPayment({
@@ -32,6 +44,7 @@ async function deepAnalysis(input) {
         token: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
       },
       settleAfterResponse: true,
+      fetch: customFetch
     });
 
     const response = await fetchWithPayment(API_URL, {
@@ -46,8 +59,7 @@ async function deepAnalysis(input) {
     });
 
     if (!response.ok) {
-      const errorText = await response.text().catch(() => '');
-      throw new Error(`HTTP ${response.status}: ${errorText}`);
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     const data = await response.json();
@@ -87,7 +99,7 @@ async function deepAnalysis(input) {
   }
 }
 
-// Run
+// Run the CLI
 const args = parseArgs({
   options: { help: { type: 'boolean', short: 'h' } },
   allowPositionals: true,
