@@ -1,6 +1,6 @@
 {
   "name": "Shun x402 Services",
-  "description": "High-quality AI services for Base builders and traders powered by Blue Agent",
+  "description": "High-quality AI-powered services for Base builders and traders",
   "version": "1.0.0",
   "main": "x402/deep-analysis/index.mjs",
   "payment": {
@@ -12,17 +12,17 @@
   "endpoints": {
     "/deep-analysis": {
       "method": "POST",
-      "description": "Deep Project Due Diligence Analysis (0.35 USDC) - Detailed risk assessment, tokenomics, team review, and recommendation",
+      "description": "Deep Project Due Diligence Analysis - Detailed risk assessment, tokenomics, team review and recommendation (0.35 USDC)",
       "parameters": {
         "contractAddress": {
           "type": "string",
           "required": false,
-          "description": "Contract address on Base chain"
+          "description": "Contract address on Base"
         },
         "projectName": {
           "type": "string",
           "required": false,
-          "description": "Name of the project"
+          "description": "Project name"
         },
         "ticker": {
           "type": "string",
