@@ -1,37 +1,41 @@
 {
-  "name": "BlueAgent x402 Services",
-  "description": "High-quality AI-powered services for Base builders and traders, powered by Blue Agent",
-  "version": "1.0.0",
-  "main": "x402/deep-analysis/index.mjs",
-  "payment": {
-    "amount": "0.35",
-    "token": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
-    "tokenSymbol": "USDC",
-    "chainId": 8453
-  },
-  "endpoints": {
-    "/deep-analysis": {
-      "method": "POST",
-      "description": "Deep Project Due Diligence Analysis (0.35 USDC) - Detailed risk assessment, tokenomics, team review and recommendation",
-      "parameters": {
-        "contractAddress": {
-          "type": "string",
-          "required": false,
-          "description": "Contract address on Base"
+  "network": "base",
+  "currency": "USDC",
+  "services": {
+    "deep-analysis": {
+      "price": "0.35",
+      "description": "Deep Project Due Diligence Analysis - Risk assessment, tokenomics, team review and recommendation for any Base token or project",
+      "schema": {
+        "input": {
+          "type": "object",
+          "properties": {
+            "contractAddress": {
+              "type": "string",
+              "description": "Contract address on Base (optional)"
+            },
+            "projectName": {
+              "type": "string",
+              "description": "Project name to analyze (optional)"
+            },
+            "ticker": {
+              "type": "string",
+              "description": "Token ticker symbol (optional)"
+            }
+          }
         },
-        "projectName": {
-          "type": "string",
-          "required": false,
-          "description": "Project name"
-        },
-        "ticker": {
-          "type": "string",
-          "required": false,
-          "description": "Token ticker (optional)"
+        "output": {
+          "type": "object",
+          "properties": {
+            "projectName": { "type": "string", "description": "Project name" },
+            "ticker": { "type": "string", "description": "Token ticker" },
+            "overallScore": { "type": "number", "description": "Overall score 0-100" },
+            "riskScore": { "type": "number", "description": "Risk score 0-100 (higher = riskier)" },
+            "rugProbability": { "type": "number", "description": "Rug pull probability 0-100" },
+            "recommendation": { "type": "string", "description": "Strong Buy | Buy | Caution | Avoid | High Risk" },
+            "summary": { "type": "string", "description": "Professional analysis summary" }
+          }
         }
       }
     }
-  },
-  "author": "@madebyshun",
-  "repository": "https://github.com/madebyshun/blueagent-x402-services"
+  }
 }

@@ -1,23 +1,61 @@
-// x402/deep-analysis/index.mjs
+// x402/deep-analysis/index.ts
 // Deep Project Due Diligence - 0.35 USDC per analysis
 // Powered by Blue Agent
 
-import { callLLM } from '../../utils/llm.js';
+async function callLLM(options: {
+  model: string;
+  system: string;
+  messages: { role: string; content: string }[];
+  temperature?: number;
+  maxTokens?: number;
+}): Promise<string> {
+  const { model, system, messages, temperature = 0.7, maxTokens = 1400 } = options;
 
-export default async function handler(req) {
+  const response = await fetch('https://llm.bankr.bot/v1/messages', {
+    method: 'POST',
+    headers: {
+      'x-api-key': process.env.BANKR_API_KEY!,
+      'Content-Type': 'application/json',
+      'anthropic-version': '2023-06-01',
+    },
+    body: JSON.stringify({
+      model,
+      system,
+      messages,
+      temperature,
+      max_tokens: maxTokens,
+    }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`LLM API error: ${response.status} - ${errorText}`);
+  }
+
+  const data = await response.json();
+
+  if (data.content && Array.isArray(data.content)) {
+    return data.content[0].text;
+  }
+  if (data.text) return data.text;
+
+  throw new Error('Invalid response format from LLM');
+}
+
+export default async function handler(req: Request): Promise<Response> {
   try {
-    let body = {};
+    let body: { contractAddress?: string; projectName?: string; ticker?: string } = {};
     try {
       body = await req.json();
     } catch {
-      // no body
+      // no body or not JSON
     }
 
     const { contractAddress, projectName, ticker } = body;
 
     if (!contractAddress && !projectName) {
       return Response.json(
-        { error: "Please provide either contractAddress or projectName" },
+        { error: 'Please provide either contractAddress or projectName' },
         { status: 400 }
       );
     }
@@ -54,25 +92,21 @@ Return ONLY a valid JSON object with this exact structure. No extra text:
   "suggestedActions": ["actionable recommendation 1", "actionable recommendation 2"]
 }`;
 
-    const userPrompt = `Perform a deep due diligence analysis on: ${input}`;
-
     const llmResponse = await callLLM({
-      model: "claude-sonnet-4.6",
+      model: 'claude-sonnet-4.6',
       system: systemPrompt,
-      messages: [{ role: "user", content: userPrompt }],
+      messages: [{ role: 'user', content: `Perform a deep due diligence analysis on: ${input}` }],
       temperature: 0.65,
-      maxTokens: 1400
+      maxTokens: 1400,
     });
 
     const result = JSON.parse(llmResponse);
-
     return Response.json(result, { status: 200 });
 
   } catch (error) {
-    console.error("[BlueAgent DeepAnalysis] Error:", error);
-
+    console.error('[BlueAgent DeepAnalysis] Error:', error);
     return Response.json(
-      { error: "Failed to perform deep project analysis", message: error.message },
+      { error: 'Failed to perform deep project analysis', message: (error as Error).message },
       { status: 500 }
     );
   }
