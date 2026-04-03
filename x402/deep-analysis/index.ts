@@ -107,14 +107,14 @@ Return ONLY a valid JSON object with this exact structure. No extra text:
 }`;
 
     const llmResponse = await callLLM({
-      model: 'claude-sonnet-4.6',
+      model: 'claude-haiku-4-5',
       system: systemPrompt,
       messages: [{ role: 'user', content: `Perform a deep due diligence analysis on: ${input}` }],
       temperature: 0.65,
       maxTokens: 1400,
     });
 
-    const result = JSON.parse(llmResponse);
+    const result = JSON.parse(llmResponse.indexOf('`') >= 0 ? llmResponse.split('```').filter((_,i)=>i%2===1)[0]?.trim() || llmResponse.replace(/`/g,'').trim() : llmResponse.trim());
     return Response.json(result, { status: 200 });
 
   } catch (error) {

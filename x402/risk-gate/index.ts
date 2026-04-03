@@ -11,7 +11,7 @@ async function callLLM(system: string, userContent: string): Promise<string> {
       'anthropic-version': '2023-06-01',
     },
     body: JSON.stringify({
-      model: 'claude-sonnet-4.6',
+      model: 'claude-haiku-4-5',
       system,
       messages: [{ role: 'user', content: userContent }],
       temperature: 0.2,
@@ -114,7 +114,7 @@ Context: ${body.context || 'None provided'}
 Contract verification check: ${contractCheck ? JSON.stringify(contractCheck) : 'Not checked'}`;
 
     const llmResponse = await callLLM(systemPrompt, userPrompt);
-    const result = JSON.parse(llmResponse);
+    const result = JSON.parse(llmResponse.indexOf('`') >= 0 ? llmResponse.split('```').filter((_,i)=>i%2===1)[0]?.trim() || llmResponse.replace(/`/g,'').trim() : llmResponse.trim());
 
     // Always set contractVerified from onchain check if available
     if (contractCheck && result.checks) {

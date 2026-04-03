@@ -11,7 +11,7 @@ async function callLLM(system: string, userContent: string): Promise<string> {
       'anthropic-version': '2023-06-01',
     },
     body: JSON.stringify({
-      model: 'claude-sonnet-4.6',
+      model: 'claude-haiku-4-5',
       system,
       messages: [{ role: 'user', content: userContent }],
       temperature: 0.5,
@@ -101,7 +101,7 @@ ${JSON.stringify(txSummary, null, 2)}
 Total transactions found: ${txs.length}`;
 
     const llmResponse = await callLLM(systemPrompt, userPrompt);
-    const result = JSON.parse(llmResponse);
+    const result = JSON.parse(llmResponse.indexOf('`') >= 0 ? llmResponse.split('```').filter((_,i)=>i%2===1)[0]?.trim() || llmResponse.replace(/`/g,'').trim() : llmResponse.trim());
 
     return Response.json(result, { status: 200 });
 
