@@ -9,7 +9,7 @@ async function callLLM(options: {
   temperature?: number;
   maxTokens?: number;
 }): Promise<string> {
-  const { model, system, messages, temperature = 0.7, maxTokens = 1400 } = options;
+  const { model, system, messages, temperature = 0.7, maxTokens = 800 } = options;
 
   const response = await fetch('https://llm.bankr.bot/v1/messages', {
     method: 'POST',
@@ -82,6 +82,8 @@ export default async function handler(req: Request): Promise<Response> {
 
     const systemPrompt = `You are a senior crypto due diligence analyst on Base chain, powered by Blue Agent.
 
+CRITICAL: Return ONLY raw JSON. No markdown. No backticks. No code blocks. Start with { and end with }.
+
 Return ONLY a valid JSON object with this exact structure. No extra text:
 
 {
@@ -111,10 +113,15 @@ Return ONLY a valid JSON object with this exact structure. No extra text:
       system: systemPrompt,
       messages: [{ role: 'user', content: `Perform a deep due diligence analysis on: ${input}` }],
       temperature: 0.65,
-      maxTokens: 1400,
+      maxTokens: 800,
     });
 
-    const result = JSON.parse(llmResponse.indexOf('`') >= 0 ? llmResponse.split('```').filter((_,i)=>i%2===1)[0]?.trim() || llmResponse.replace(/`/g,'').trim() : llmResponse.trim());
+    // Robust JSON extraction
+    let raw = llmResponse.trim();
+    const start = raw.indexOf('{');
+    const end = raw.lastIndexOf('}');
+    if (start >= 0 && end > start) raw = raw.slice(start, end + 1);
+    const result = JSON.parse(raw);
     return Response.json(result, { status: 200 });
 
   } catch (error) {

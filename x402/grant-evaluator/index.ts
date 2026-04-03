@@ -67,6 +67,8 @@ Evaluation criteria:
 - Impact Potential (how many users/TVL could this bring to Base?)
 - Milestone Clarity (are goals specific and measurable?)
 
+CRITICAL: Return ONLY raw JSON. No markdown. No backticks. No code blocks. Start with { and end with }.
+
 Return ONLY a valid JSON object:
 
 {
@@ -102,7 +104,12 @@ GitHub: ${body.githubUrl || 'Not provided'}
 Website: ${body.websiteUrl || 'Not provided'}`;
 
     const llmResponse = await callLLM(systemPrompt, userPrompt);
-    const result = JSON.parse(llmResponse.indexOf('`') >= 0 ? llmResponse.split('```').filter((_,i)=>i%2===1)[0]?.trim() || llmResponse.replace(/`/g,'').trim() : llmResponse.trim());
+// Robust JSON extraction
+    let raw = llmResponse.trim();
+    const start = raw.indexOf('{');
+    const end = raw.lastIndexOf('}');
+    if (start >= 0 && end > start) raw = raw.slice(start, end + 1);
+    const result = JSON.parse(raw);
 
     return Response.json(result, { status: 200 });
 

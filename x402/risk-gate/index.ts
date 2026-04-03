@@ -85,6 +85,8 @@ Red flags to always block:
 - Amount exceeds reasonable limits (>$1000 without explicit override)
 - Actions that could drain wallet
 
+CRITICAL: Return ONLY raw JSON. No markdown. No backticks. No code blocks. Start with { and end with }.
+
 Return ONLY a valid JSON object:
 
 {
@@ -114,7 +116,12 @@ Context: ${body.context || 'None provided'}
 Contract verification check: ${contractCheck ? JSON.stringify(contractCheck) : 'Not checked'}`;
 
     const llmResponse = await callLLM(systemPrompt, userPrompt);
-    const result = JSON.parse(llmResponse.indexOf('`') >= 0 ? llmResponse.split('```').filter((_,i)=>i%2===1)[0]?.trim() || llmResponse.replace(/`/g,'').trim() : llmResponse.trim());
+// Robust JSON extraction
+    let raw = llmResponse.trim();
+    const start = raw.indexOf('{');
+    const end = raw.lastIndexOf('}');
+    if (start >= 0 && end > start) raw = raw.slice(start, end + 1);
+    const result = JSON.parse(raw);
 
     // Always set contractVerified from onchain check if available
     if (contractCheck && result.checks) {
