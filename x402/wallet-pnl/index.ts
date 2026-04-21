@@ -50,7 +50,7 @@ export default async function handler(req: Request): Promise<Response> {
 
     const { address } = body;
 
-    if (!address || !address.startsWith('0x')) {
+    if (!address || !/^0x[a-fA-F0-9]{40}$/.test(address)) {
       return Response.json(
         { error: 'Please provide a valid wallet address (0x...)' },
         { status: 400 }

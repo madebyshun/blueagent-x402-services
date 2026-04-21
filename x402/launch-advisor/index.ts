@@ -45,6 +45,15 @@ export default async function handler(req: Request): Promise<Response> {
       if (text && text.trim().startsWith("{")) body = JSON.parse(text);
     } catch {}
 
+    // Fallback to query params
+    const url = new URL(req.url);
+    if (!body.projectName) body.projectName = url.searchParams.get('projectName') || undefined;
+    if (!body.description) body.description = url.searchParams.get('description') || undefined;
+    if (!body.targetAudience) body.targetAudience = url.searchParams.get('targetAudience') || undefined;
+    if (!body.teamSize) body.teamSize = url.searchParams.get('teamSize') || undefined;
+    if (!body.budget) body.budget = url.searchParams.get('budget') || undefined;
+    if (!body.tokenSupply) body.tokenSupply = url.searchParams.get('tokenSupply') || undefined;
+
     const { projectName, description, targetAudience } = body;
 
     if (!projectName || !description) {

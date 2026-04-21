@@ -126,9 +126,12 @@ Return ONLY a valid JSON object with this exact structure. No extra text:
       maxTokens: 900,
     });
 
-    // Strip markdown code blocks if present
-    const cleaned = llmResponse.replace(/```(?:json)?\n?/g, '').replace(/```/g, '').trim();
-    const result = JSON.parse(cleaned);
+    // Robust JSON extraction
+    let raw = llmResponse.replace(/```(?:json)?\n?/g, '').replace(/```/g, '').trim();
+    const start = raw.indexOf('{');
+    const end = raw.lastIndexOf('}');
+    if (start >= 0 && end > start) raw = raw.slice(start, end + 1);
+    const result = JSON.parse(raw);
     return Response.json(result, { status: 200 });
 
   } catch (error) {

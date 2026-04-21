@@ -57,6 +57,15 @@ export default async function handler(req: Request): Promise<Response> {
       if (text && text.trim().startsWith("{")) body = JSON.parse(text);
     } catch {}
 
+    // Fallback to query params
+    const url = new URL(req.url);
+    if (!body.action) body.action = url.searchParams.get('action') || undefined;
+    if (!body.contractAddress) body.contractAddress = url.searchParams.get('contractAddress') || undefined;
+    if (!body.amount) body.amount = url.searchParams.get('amount') || undefined;
+    if (!body.toAddress) body.toAddress = url.searchParams.get('toAddress') || undefined;
+    if (!body.agentId) body.agentId = url.searchParams.get('agentId') || undefined;
+    if (!body.context) body.context = url.searchParams.get('context') || undefined;
+
     const { action, contractAddress, amount } = body;
 
     if (!action) {

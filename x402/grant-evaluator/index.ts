@@ -46,6 +46,16 @@ export default async function handler(req: Request): Promise<Response> {
       if (text && text.trim().startsWith("{")) body = JSON.parse(text);
     } catch {}
 
+    // Fallback to query params
+    const url = new URL(req.url);
+    if (!body.projectName) body.projectName = url.searchParams.get('projectName') || undefined;
+    if (!body.description) body.description = url.searchParams.get('description') || undefined;
+    if (!body.teamBackground) body.teamBackground = url.searchParams.get('teamBackground') || undefined;
+    if (!body.requestedAmount) body.requestedAmount = url.searchParams.get('requestedAmount') || undefined;
+    if (!body.milestones) body.milestones = url.searchParams.get('milestones') || undefined;
+    if (!body.githubUrl) body.githubUrl = url.searchParams.get('githubUrl') || undefined;
+    if (!body.websiteUrl) body.websiteUrl = url.searchParams.get('websiteUrl') || undefined;
+
     const { projectName, description } = body;
 
     if (!projectName || !description) {

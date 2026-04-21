@@ -102,7 +102,10 @@ export default async function handler(req: Request): Promise<Response> {
       maxTokens: count * 150 + 100,
     })
 
-    const cleaned = llmResponse.replace(/```(?:json)?\n?/g, '').replace(/```/g, '').trim()
+    let cleaned = llmResponse.replace(/```(?:json)?\n?/g, '').replace(/```/g, '').trim()
+    const arrStart = cleaned.indexOf('[')
+    const arrEnd = cleaned.lastIndexOf(']')
+    if (arrStart >= 0 && arrEnd > arrStart) cleaned = cleaned.slice(arrStart, arrEnd + 1)
     const results = JSON.parse(cleaned)
 
     const response = {
