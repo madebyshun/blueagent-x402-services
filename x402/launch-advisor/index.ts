@@ -1,92 +1,20 @@
-// x402/launch-advisor/index.ts
-// Token Launch Advisor - $3.00 USDC per plan
-// Powered by Blue Agent
+import { callLLM } from '../_lib/llm.js'
+import { extractJSON } from '../_lib/json.js'
 
-async function callLLM(system: string, userContent: string): Promise<string> {
-  const response = await fetch('https://llm.bankr.bot/v1/messages', {
-    method: 'POST',
-    headers: {
-      'x-api-key': process.env.BANKR_API_KEY!,
-      'Content-Type': 'application/json',
-      'anthropic-version': '2023-06-01',
-    },
-    body: JSON.stringify({
-      model: 'claude-haiku-4-5',
-      system,
-      messages: [{ role: 'user', content: userContent }],
-      temperature: 0.7,
-      max_tokens: 2000,
-    }),
-  });
+const SYSTEM = `You are a seasoned Web3 launch strategist with 5+ years experience launching successful tokens on Base.
 
-  if (!response.ok) {
-    const err = await response.text();
-    throw new Error(`LLM error: ${response.status} - ${err}`);
-  }
-
-  const data = await response.json();
-  if (data.content && Array.isArray(data.content)) return data.content[0].text;
-  if (data.text) return data.text;
-  throw new Error('Invalid LLM response format');
-}
-
-export default async function handler(req: Request): Promise<Response> {
-  try {
-    let body: {
-      projectName?: string;
-      description?: string;
-      targetAudience?: string;
-      tokenSupply?: string;
-      teamSize?: string;
-      budget?: string;
-    } = {};
-    try {
-      const text = await req.text();
-      if (text && text.trim().startsWith("{")) body = JSON.parse(text);
-    } catch {}
-
-    // Fallback to query params
-    const url = new URL(req.url);
-    if (!body.projectName) body.projectName = url.searchParams.get('projectName') || undefined;
-    if (!body.description) body.description = url.searchParams.get('description') || undefined;
-    if (!body.targetAudience) body.targetAudience = url.searchParams.get('targetAudience') || undefined;
-    if (!body.teamSize) body.teamSize = url.searchParams.get('teamSize') || undefined;
-    if (!body.budget) body.budget = url.searchParams.get('budget') || undefined;
-    if (!body.tokenSupply) body.tokenSupply = url.searchParams.get('tokenSupply') || undefined;
-
-    const { projectName, description, targetAudience } = body;
-
-    if (!projectName || !description) {
-      return Response.json(
-        { error: 'Please provide projectName and description' },
-        { status: 400 }
-      );
-    }
-
-    console.log(`[LaunchAdvisor] Planning launch for: ${projectName}`);
-
-    const systemPrompt = `You are a seasoned Web3 launch strategist with 5+ years experience launching successful tokens on Base. You have helped projects raise $50M+ combined.
-
-CRITICAL: Return ONLY raw JSON. No markdown. No backticks. No code blocks. Start with { and end with }.
-
-Return ONLY a valid JSON object with this structure:
+CRITICAL: Return ONLY raw JSON. No markdown. No backticks. Start with { and end with }.
 
 {
   "projectName": "string",
-  "launchScore": number (0-100, viability score),
-  "executiveSummary": "2-3 sentence overview",
+  "launchScore": number (0-100),
+  "executiveSummary": "2-3 sentences",
   "tokenomics": {
     "suggestedSupply": "string",
-    "distribution": {
-      "community": "string (e.g. 40%)",
-      "team": "string",
-      "liquidity": "string",
-      "treasury": "string",
-      "marketing": "string"
-    },
+    "distribution": { "community": "string", "team": "string", "liquidity": "string", "treasury": "string", "marketing": "string" },
     "vestingSchedule": "string",
-    "initialMarketCap": "string (suggested range)",
-    "warnings": ["warning1", "warning2"]
+    "initialMarketCap": "string",
+    "warnings": ["warning1"]
   },
   "launchTimeline": [
     { "week": "Week 1-2", "phase": "string", "tasks": ["task1", "task2"] },
@@ -94,45 +22,44 @@ Return ONLY a valid JSON object with this structure:
     { "week": "Week 5-6", "phase": "string", "tasks": ["task1", "task2"] },
     { "week": "Week 7-8", "phase": "string", "tasks": ["task1", "task2"] }
   ],
-  "marketingStrategy": {
-    "channels": ["channel1", "channel2"],
-    "keyMessages": ["message1", "message2"],
-    "influencerTiers": "string",
-    "communityBuilding": "string"
-  },
-  "redFlags": ["risk1", "risk2"],
-  "competitiveEdge": ["advantage1", "advantage2"],
+  "marketingStrategy": { "channels": ["ch1"], "keyMessages": ["msg1"], "influencerTiers": "string", "communityBuilding": "string" },
+  "redFlags": ["risk1"],
+  "competitiveEdge": ["advantage1"],
   "kpis": {
     "week4": { "holders": "string", "volume": "string", "community": "string" },
     "month3": { "holders": "string", "volume": "string", "community": "string" }
   },
   "recommendation": "string (go/no-go + reasoning)"
-}`;
+}`
 
-    const userPrompt = `Create a full launch playbook for this Base project:
-
-Project Name: ${projectName}
-Description: ${description}
-Target Audience: ${targetAudience || 'Base builders and traders'}
-Team Size: ${body.teamSize || 'Not specified'}
-Budget: ${body.budget || 'Not specified'}
-Token Supply: ${body.tokenSupply || 'Not specified'}`;
-
-    const llmResponse = await callLLM(systemPrompt, userPrompt);
-// Robust JSON extraction
-    let raw = llmResponse.trim();
-    const start = raw.indexOf('{');
-    const end = raw.lastIndexOf('}');
-    if (start >= 0 && end > start) raw = raw.slice(start, end + 1);
-    const result = JSON.parse(raw);
-
-    return Response.json(result, { status: 200 });
-
+export default async function handler(req: Request): Promise<Response> {
+  try {
+    let body: { projectName?: string; description?: string; targetAudience?: string; tokenSupply?: string; teamSize?: string; budget?: string } = {}
+    try {
+      const text = await req.text()
+      if (text?.trim().startsWith('{')) body = JSON.parse(text)
+    } catch {}
+    const url = new URL(req.url)
+    if (!body.projectName) body.projectName = url.searchParams.get('projectName') || undefined
+    if (!body.description) body.description = url.searchParams.get('description') || undefined
+    if (!body.targetAudience) body.targetAudience = url.searchParams.get('targetAudience') || undefined
+    if (!body.teamSize) body.teamSize = url.searchParams.get('teamSize') || undefined
+    if (!body.budget) body.budget = url.searchParams.get('budget') || undefined
+    if (!body.tokenSupply) body.tokenSupply = url.searchParams.get('tokenSupply') || undefined
+    const { projectName, description, targetAudience } = body
+    if (!projectName || !description) {
+      return Response.json({ error: 'Provide projectName and description' }, { status: 400 })
+    }
+    console.log(`[LaunchAdvisor] Planning: ${projectName}`)
+    const raw = await callLLM({
+      system: SYSTEM,
+      user: `Launch playbook for:\nProject: ${projectName}\nDescription: ${description}\nAudience: ${targetAudience ?? 'Base builders and traders'}\nTeam: ${body.teamSize ?? 'N/A'}\nBudget: ${body.budget ?? 'N/A'}\nSupply: ${body.tokenSupply ?? 'N/A'}`,
+      temperature: 0.7,
+      maxTokens: 2000,
+    })
+    return Response.json(extractJSON(raw))
   } catch (error) {
-    console.error('[LaunchAdvisor] Error:', error);
-    return Response.json(
-      { error: 'Failed to generate launch plan', message: (error as Error).message },
-      { status: 500 }
-    );
+    console.error('[LaunchAdvisor] Error:', error)
+    return Response.json({ error: 'Launch plan failed', message: (error as Error).message }, { status: 500 })
   }
 }

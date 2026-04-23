@@ -1,85 +1,9 @@
-// x402/grant-evaluator/index.ts
-// Base Grant Evaluator - $5.00 USDC per evaluation
-// Powered by Blue Agent
+import { callLLM } from '../_lib/llm.js'
+import { extractJSON } from '../_lib/json.js'
 
-async function callLLM(system: string, userContent: string): Promise<string> {
-  const response = await fetch('https://llm.bankr.bot/v1/messages', {
-    method: 'POST',
-    headers: {
-      'x-api-key': process.env.BANKR_API_KEY!,
-      'Content-Type': 'application/json',
-      'anthropic-version': '2023-06-01',
-    },
-    body: JSON.stringify({
-      model: 'claude-haiku-4-5',
-      system,
-      messages: [{ role: 'user', content: userContent }],
-      temperature: 0.4,
-      max_tokens: 2000,
-    }),
-  });
+const SYSTEM = `You are a senior grants evaluator for Base ecosystem grants using Base/Coinbase criteria.
 
-  if (!response.ok) {
-    const err = await response.text();
-    throw new Error(`LLM error: ${response.status} - ${err}`);
-  }
-
-  const data = await response.json();
-  if (data.content && Array.isArray(data.content)) return data.content[0].text;
-  if (data.text) return data.text;
-  throw new Error('Invalid LLM response format');
-}
-
-export default async function handler(req: Request): Promise<Response> {
-  try {
-    let body: {
-      projectName?: string;
-      description?: string;
-      teamBackground?: string;
-      requestedAmount?: string;
-      milestones?: string;
-      githubUrl?: string;
-      websiteUrl?: string;
-    } = {};
-    try {
-      const text = await req.text();
-      if (text && text.trim().startsWith("{")) body = JSON.parse(text);
-    } catch {}
-
-    // Fallback to query params
-    const url = new URL(req.url);
-    if (!body.projectName) body.projectName = url.searchParams.get('projectName') || undefined;
-    if (!body.description) body.description = url.searchParams.get('description') || undefined;
-    if (!body.teamBackground) body.teamBackground = url.searchParams.get('teamBackground') || undefined;
-    if (!body.requestedAmount) body.requestedAmount = url.searchParams.get('requestedAmount') || undefined;
-    if (!body.milestones) body.milestones = url.searchParams.get('milestones') || undefined;
-    if (!body.githubUrl) body.githubUrl = url.searchParams.get('githubUrl') || undefined;
-    if (!body.websiteUrl) body.websiteUrl = url.searchParams.get('websiteUrl') || undefined;
-
-    const { projectName, description } = body;
-
-    if (!projectName || !description) {
-      return Response.json(
-        { error: 'Please provide projectName and description' },
-        { status: 400 }
-      );
-    }
-
-    console.log(`[GrantEvaluator] Evaluating: ${projectName}`);
-
-    const systemPrompt = `You are a senior grants evaluator for Base ecosystem grants. You assess projects using the same criteria as Base Grants, Coinbase Ventures, and top crypto foundations.
-
-Evaluation criteria:
-- Innovation (is this new or just another copy?)
-- Base Alignment (does it benefit Base ecosystem specifically?)
-- Technical Feasibility (can they actually build this?)
-- Team Quality (do they have the skills?)
-- Impact Potential (how many users/TVL could this bring to Base?)
-- Milestone Clarity (are goals specific and measurable?)
-
-CRITICAL: Return ONLY raw JSON. No markdown. No backticks. No code blocks. Start with { and end with }.
-
-Return ONLY a valid JSON object:
+CRITICAL: Return ONLY raw JSON. No markdown. No backticks. Start with { and end with }.
 
 {
   "projectName": "string",
@@ -93,41 +17,45 @@ Return ONLY a valid JSON object:
     "teamQuality": number (0-20),
     "impactPotential": number (0-20)
   },
-  "strengths": ["strength1", "strength2", "strength3"],
-  "concerns": ["concern1", "concern2"],
-  "conditions": ["condition1 (if Fund with Conditions)", "condition2"],
-  "questionsForTeam": ["question1", "question2", "question3"],
-  "comparableProjects": ["similar funded project 1", "similar project 2"],
-  "executiveSummary": "3-4 sentence professional evaluation summary",
-  "milestoneAssessment": "string (are milestones realistic and measurable?)",
+  "strengths": ["s1", "s2", "s3"],
+  "concerns": ["c1", "c2"],
+  "conditions": ["condition1"],
+  "questionsForTeam": ["q1", "q2", "q3"],
+  "comparableProjects": ["project1", "project2"],
+  "executiveSummary": "3-4 sentence professional evaluation",
+  "milestoneAssessment": "string",
   "riskLevel": "Low | Medium | High | Very High"
-}`;
+}`
 
-    const userPrompt = `Evaluate this Base ecosystem grant application:
-
-Project Name: ${projectName}
-Description: ${description}
-Team Background: ${body.teamBackground || 'Not provided'}
-Requested Amount: ${body.requestedAmount || 'Not specified'}
-Milestones: ${body.milestones || 'Not provided'}
-GitHub: ${body.githubUrl || 'Not provided'}
-Website: ${body.websiteUrl || 'Not provided'}`;
-
-    const llmResponse = await callLLM(systemPrompt, userPrompt);
-// Robust JSON extraction
-    let raw = llmResponse.trim();
-    const start = raw.indexOf('{');
-    const end = raw.lastIndexOf('}');
-    if (start >= 0 && end > start) raw = raw.slice(start, end + 1);
-    const result = JSON.parse(raw);
-
-    return Response.json(result, { status: 200 });
-
+export default async function handler(req: Request): Promise<Response> {
+  try {
+    let body: { projectName?: string; description?: string; teamBackground?: string; requestedAmount?: string; milestones?: string; githubUrl?: string; websiteUrl?: string } = {}
+    try {
+      const text = await req.text()
+      if (text?.trim().startsWith('{')) body = JSON.parse(text)
+    } catch {}
+    const url = new URL(req.url)
+    if (!body.projectName) body.projectName = url.searchParams.get('projectName') || undefined
+    if (!body.description) body.description = url.searchParams.get('description') || undefined
+    if (!body.teamBackground) body.teamBackground = url.searchParams.get('teamBackground') || undefined
+    if (!body.requestedAmount) body.requestedAmount = url.searchParams.get('requestedAmount') || undefined
+    if (!body.milestones) body.milestones = url.searchParams.get('milestones') || undefined
+    if (!body.githubUrl) body.githubUrl = url.searchParams.get('githubUrl') || undefined
+    if (!body.websiteUrl) body.websiteUrl = url.searchParams.get('websiteUrl') || undefined
+    const { projectName, description } = body
+    if (!projectName || !description) {
+      return Response.json({ error: 'Provide projectName and description' }, { status: 400 })
+    }
+    console.log(`[GrantEvaluator] Evaluating: ${projectName}`)
+    const raw = await callLLM({
+      system: SYSTEM,
+      user: `Evaluate Base grant application:\nProject: ${projectName}\nDescription: ${description}\nTeam: ${body.teamBackground ?? 'Not provided'}\nAmount: ${body.requestedAmount ?? 'Not specified'}\nMilestones: ${body.milestones ?? 'Not provided'}\nGitHub: ${body.githubUrl ?? 'N/A'}\nWebsite: ${body.websiteUrl ?? 'N/A'}`,
+      temperature: 0.4,
+      maxTokens: 2000,
+    })
+    return Response.json(extractJSON(raw))
   } catch (error) {
-    console.error('[GrantEvaluator] Error:', error);
-    return Response.json(
-      { error: 'Failed to evaluate grant application', message: (error as Error).message },
-      { status: 500 }
-    );
+    console.error('[GrantEvaluator] Error:', error)
+    return Response.json({ error: 'Grant evaluation failed', message: (error as Error).message }, { status: 500 })
   }
 }
