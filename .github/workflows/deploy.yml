@@ -23,7 +23,25 @@ jobs:
       - name: Inline _lib helpers
         run: node scripts/inline-libs.js
 
-      - name: Deploy all services
+      - name: Deploy services (one by one for visibility)
         env:
           BANKR_API_KEY: ${{ secrets.BANKR_API_KEY }}
-        run: bankr x402 deploy
+        run: |
+          set +e
+          FAILED=""
+          for svc in $(node -e "const d=require('./bankr.x402.json'); console.log(Object.keys(d.services).join(' '))"); do
+            echo "▶ Deploying $svc..."
+            bankr x402 deploy $svc
+            if [ $? -ne 0 ]; then
+              echo "✗ FAILED: $svc"
+              FAILED="$FAILED $svc"
+            else
+              echo "✓ OK: $svc"
+            fi
+          done
+          if [ -n "$FAILED" ]; then
+            echo ""
+            echo "❌ Failed services:$FAILED"
+            exit 1
+          fi
+          echo "✅ All services deployed"
