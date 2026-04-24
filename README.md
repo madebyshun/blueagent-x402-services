@@ -1,6 +1,6 @@
 # BlueAgent x402 Services
 
-> **Security OS for Autonomous Agents on Base** — 29 pay-per-use AI tools via x402 protocol.
+> **Security OS for Autonomous Agents on Base** — 31 pay-per-use AI tools via x402 protocol.
 > No subscription. No API key. Pay USDC per call.
 
 Built for AI agents, Zero-Human Companies (ZHC), and Base ecosystem builders.
@@ -130,6 +130,7 @@ bankr x402 call 0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/risk-gate \
 | `lp-analyzer` | $0.25 | LP position — impermanent loss, fee income, rebalance signal |
 | `tax-report` | $2.00 | On-chain tax summary — realized gains, taxable events |
 | `alert-subscribe` | $0.50 | Subscribe to whale/circuit-breaker alerts via webhook |
+| `alert-check` | $0.10 | Check active alert triggers for any address |
 
 ---
 

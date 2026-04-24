@@ -1136,6 +1136,44 @@
       "scheme": "exact",
       "category": "alerts",
       "description": "Check active alert triggers for any address"
+    },
+    "lp-analyzer": {
+      "method": "POST",
+      "price": "0.25",
+      "scheme": "exact",
+      "category": "earn",
+      "description": "LP position analysis — impermanent loss, fee income, rebalance recommendation",
+      "schema": {
+        "input": {
+          "type": "object",
+          "properties": {
+            "positionId": { "type": "string", "description": "LP NFT position ID" },
+            "pool": { "type": "string", "description": "Pool contract address" },
+            "token0": { "type": "string", "description": "First token symbol or address" },
+            "token1": { "type": "string", "description": "Second token symbol or address" },
+            "entryPrice": { "type": "string", "description": "Price when position was opened" },
+            "investedAmount": { "type": "string", "description": "Total USD invested" }
+          }
+        }
+      }
+    },
+    "tax-report": {
+      "method": "POST",
+      "price": "2.00",
+      "scheme": "exact",
+      "category": "earn",
+      "description": "On-chain tax summary — realized gains, taxable events, P&L",
+      "schema": {
+        "input": {
+          "type": "object",
+          "properties": {
+            "address": { "type": "string", "description": "Wallet address (0x...)" },
+            "year": { "type": "string", "description": "Tax year (default: current year)" },
+            "country": { "type": "string", "description": "Country for tax rules (default: US)" }
+          },
+          "required": ["address"]
+        }
+      }
     }
   }
 }

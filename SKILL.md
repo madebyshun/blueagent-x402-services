@@ -2,7 +2,7 @@
 name: blueagent-x402
 description: >
   Security OS for autonomous agents and builders on Base.
-  29 pay-per-use tools across Quantum Security, Agent Safety, Research, Data, and Earn.
+  31 pay-per-use tools across Quantum Security, Agent Safety, Research, Data, and Earn.
   Built for AI agents, Zero-Human Companies (ZHC), and Base ecosystem builders.
   Pay USDC per call via x402 protocol — no subscription, no API key needed.
 metadata:
@@ -18,7 +18,7 @@ metadata:
 
 # BlueAgent x402 — Security OS for Autonomous Agents
 
-**29 pay-per-use AI tools on Base** — Quantum Security · Agent Safety · Research · Data · Earn
+**31 pay-per-use AI tools on Base** — Quantum Security · Agent Safety · Research · Data · Earn
 
 **Base URL:** `https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/`
 
