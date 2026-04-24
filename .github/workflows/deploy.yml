@@ -1,0 +1,29 @@
+name: Deploy x402 Services
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'x402/**'
+      - 'bankr.x402.json'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Bankr CLI
+        run: npm install -g @bankr/cli@latest
+
+      - name: Inline _lib helpers
+        run: node scripts/inline-libs.js
+
+      - name: Deploy all services
+        env:
+          BANKR_API_KEY: ${{ secrets.BANKR_API_KEY }}
+        run: bankr x402 deploy
