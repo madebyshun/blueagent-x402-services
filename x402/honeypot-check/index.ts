@@ -1,7 +1,7 @@
-// Inline helpers — bankr x402 deploy requires self-contained service files
+// ── inline helpers (bankr x402 deploy requires self-contained files) ──────
 
 async function callLLM(opts: { system: string; user: string; temperature?: number; maxTokens?: number }): Promise<string> {
-  const response = await fetch('https://llm.bankr.bot/v1/messages', {
+  const res = await fetch('https://llm.bankr.bot/v1/messages', {
     method: 'POST',
     headers: {
       'x-api-key': process.env.BANKR_LLM_KEY ?? process.env.BANKR_API_KEY ?? '',
@@ -16,27 +16,26 @@ async function callLLM(opts: { system: string; user: string; temperature?: numbe
       max_tokens: opts.maxTokens ?? 800,
     }),
   })
-  if (!response.ok) throw new Error(`LLM error: ${response.status}`)
-  const data = await response.json()
+  if (!res.ok) throw new Error(`LLM error: ${res.status}`)
+  const data = await res.json()
   if (data.content?.[0]?.text) return data.content[0].text
-  if (data.text) return data.text
   throw new Error('Invalid LLM response')
 }
 
 function extractJSON(raw: string): unknown {
-  const start = raw.indexOf('{')
-  const end = raw.lastIndexOf('}')
-  if (start === -1 || end === -1) throw new Error('No JSON found')
-  return JSON.parse(raw.slice(start, end + 1))
+  const s = raw.indexOf('{'), e = raw.lastIndexOf('}')
+  if (s === -1 || e === -1) throw new Error('No JSON found')
+  return JSON.parse(raw.slice(s, e + 1))
 }
 
 async function getABI(address: string) {
   const key = process.env.BASESCAN_API_KEY ?? ''
-  const url = `https://api.basescan.org/api?module=contract&action=getabi&address=${address}&apikey=${key}`
-  const res = await fetch(url, { signal: AbortSignal.timeout(5000) })
+  const res = await fetch(`https://api.basescan.org/api?module=contract&action=getabi&address=${address}&apikey=${key}`, { signal: AbortSignal.timeout(5000) })
   const data = await res.json()
   return { verified: data.status === '1', abi: data.result }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
 
 const SYSTEM = `You are a smart contract security expert specializing in honeypot and rug pull detection on Base chain.
 
@@ -66,8 +65,6 @@ export default async function handler(req: Request): Promise<Response> {
     const { token } = body
     if (!token) return Response.json({ error: 'Provide token contract address' }, { status: 400 })
 
-    console.log(`[HoneypotCheck] Checking: ${token}`)
-
     let contractData = { verified: false, abi: null as any }
     if (/^0x[a-fA-F0-9]{40}$/.test(token)) {
       try { contractData = await getABI(token) } catch {}
@@ -81,7 +78,6 @@ export default async function handler(req: Request): Promise<Response> {
     })
     return Response.json(extractJSON(raw))
   } catch (error) {
-    console.error('[HoneypotCheck] Error:', error)
     return Response.json({ error: 'Honeypot check failed', message: (error as Error).message }, { status: 500 })
   }
 }
