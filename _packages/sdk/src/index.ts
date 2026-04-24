@@ -55,6 +55,9 @@ class SecuritySDK {
   quantum(p: { address: string; chain?: string }) {
     return this.c('quantum-premium', { chain: 'base', ...p })
   }
+  quantumBatch(p: { addresses: string[] }) {
+    return this.c('quantum-batch', { ...p, chain: 'base' })
+  }
   keyExposure(p: { address: string }) {
     return this.c('key-exposure', { ...p, chain: 'base' })
   }
@@ -86,7 +89,7 @@ class ResearchSDK {
   vcTracker(p: { query: string }) {
     return this.c('vc-tracker', p)
   }
-  advisor(p: { description: string; projectName?: string; targetAudience?: string; budget?: string }) {
+  launchAdvisor(p: { projectName: string; description?: string; targetRaise?: string }) {
     return this.c('launch-advisor', p)
   }
   grant(p: { description: string; projectName?: string; teamBackground?: string; requestedAmount?: string; milestones?: string }) {
@@ -114,8 +117,8 @@ class DataSDK {
   dexFlow(p: { token: string }) {
     return this.c('dex-flow', { ...p, chain: 'base' })
   }
-  unlockAlert(p: { token: string; days?: number }) {
-    return this.c('unlock-alert', { days: 30, ...p })
+  alertCheck(p: { address: string }) {
+    return this.c('alert-check', p)
   }
 }
 
@@ -135,6 +138,9 @@ class EarnSDK {
   }
   taxReport(p: { address: string; year?: number; country?: string }) {
     return this.c('tax-report', { year: new Date().getFullYear(), country: 'US', chain: 'base', ...p })
+  }
+  alertSubscribe(p: { webhookUrl: string; topics: string[]; addresses?: string[] }) {
+    return this.c('alert-subscribe', p)
   }
 }
 

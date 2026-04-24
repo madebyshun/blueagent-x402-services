@@ -1,7 +1,7 @@
 {
   "name": "@blueagent/sdk",
-  "version": "1.0.0",
-  "description": "BlueAgent SDK — 25 x402 security and research tools for Base agents",
+  "version": "1.1.0",
+  "description": "BlueAgent SDK — 31 pay-per-use x402 tools for Base agents: security, quantum, research, data, and earn",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
