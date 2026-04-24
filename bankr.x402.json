@@ -1,10 +1,4 @@
 {
-  "name": "BlueAgent",
-  "description": "Security OS for autonomous agents on Base — 31 pay-per-use tools: quantum safety, risk checks, research, data, and DeFi. No subscription, no API key. Pay USDC per call.",
-  "homepage": "https://github.com/madebyshun/blueagent-x402-services",
-  "baseUrl": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5",
-  "categories": ["security", "quantum", "research", "data", "earn"],
-  "tags": ["agent-safety", "base", "defi", "security", "x402", "coinbase-agentkit"],
   "network": "base",
   "currency": "USDC",
   "services": {
@@ -1178,21 +1172,6 @@
             "country": { "type": "string", "description": "Country for tax rules (default: US)" }
           },
           "required": ["address"]
-        }
-      }
-    },
-    "discover": {
-      "price": "0.01",
-      "scheme": "exact",
-      "category": "meta",
-      "description": "Service discovery — list all 31 tools, prices, schemas. Add ?category=safety|quantum|research|data|earn to filter. Add ?format=llm for compact text.",
-      "schema": {
-        "input": {
-          "type": "object",
-          "properties": {
-            "category": { "type": "string", "description": "Filter by category: safety, quantum, research, data, earn" },
-            "format": { "type": "string", "description": "Response format: json (default) or llm (compact text)" }
-          }
         }
       }
     }
