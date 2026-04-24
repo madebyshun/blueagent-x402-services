@@ -1,0 +1,33 @@
+{
+  "name": "@blueagent/skill",
+  "version": "1.1.0",
+  "description": "BlueAgent MCP server — 31 pay-per-use x402 tools for Claude Code, Claude Desktop, and Cursor",
+  "type": "module",
+  "main": "dist/src/index.js",
+  "bin": {
+    "@blueagent/skill": "dist/src/index.js",
+    "blueagent-skill": "dist/bin/install.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/src/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "viem": "^2.0.0",
+    "x402-fetch": "latest"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "@types/node": "^20.0.0"
+  },
+  "keywords": [
+    "blueagent", "mcp", "claude", "cursor", "x402", "base", "security",
+    "ai-agent", "web3", "agentkit", "coinbase"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/madebyshun/blueagent-x402-services"
+  }
+}

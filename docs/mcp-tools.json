@@ -1,0 +1,513 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BlueAgent MCP Tools",
+  "description": "31 pay-per-use x402 tools for AI agents on Base. All tools require WALLET_PRIVATE_KEY with USDC.",
+  "version": "1.1.0",
+  "baseUrl": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5",
+  "payment": { "currency": "USDC", "network": "base", "protocol": "x402" },
+  "install": {
+    "claudeCode":    "npx @blueagent/skill install --claude",
+    "claudeDesktop": "npx @blueagent/skill install --desktop",
+    "cursor":        "npx @blueagent/skill install --cursor",
+    "all":           "npx @blueagent/skill install --all"
+  },
+  "tools": [
+    {
+      "name": "riskcheck",
+      "category": "Agent Safety",
+      "price": "$0.05",
+      "description": "Pre-transaction safety check — APPROVE / WARN / BLOCK with risk score",
+      "inputSchema": {
+        "type": "object",
+        "required": ["action"],
+        "properties": {
+          "action":          { "type": "string", "description": "Describe the onchain action" },
+          "contractAddress": { "type": "string", "description": "Target contract address" },
+          "amount":          { "type": "string", "description": "USD or token amount" },
+          "agentId":         { "type": "string", "description": "Your agent ID for audit trail" }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "decision":    { "type": "string", "enum": ["APPROVE", "WARN", "BLOCK"] },
+          "riskScore":   { "type": "number", "description": "0-100, higher = more dangerous" },
+          "reasons":     { "type": "array", "items": { "type": "string" } },
+          "recommendation": { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "honeypot-check",
+      "category": "Agent Safety",
+      "price": "$0.05",
+      "description": "Detect honeypot or rug pull token contracts — SAFE / SUSPICIOUS / HONEYPOT verdict",
+      "inputSchema": {
+        "type": "object",
+        "required": ["token"],
+        "properties": {
+          "token": { "type": "string", "description": "Token contract address (0x...)" }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "isHoneypot":    { "type": "boolean" },
+          "verdict":       { "type": "string", "enum": ["SAFE", "SUSPICIOUS", "HONEYPOT"] },
+          "riskScore":     { "type": "number" },
+          "confidence":    { "type": "number" },
+          "indicators":    { "type": "array", "items": { "type": "string" } },
+          "safeToTrade":   { "type": "boolean" },
+          "recommendation":{ "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "allowance-audit",
+      "category": "Agent Safety",
+      "price": "$0.20",
+      "description": "Audit dangerous ERC-20 token approvals — find unlimited allowances to revoke",
+      "inputSchema": {
+        "type": "object",
+        "required": ["address"],
+        "properties": {
+          "address": { "type": "string", "description": "Wallet address (0x...)" }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "totalApprovals":     { "type": "number" },
+          "dangerousApprovals": { "type": "number" },
+          "approvals": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "token":    { "type": "string" },
+                "spender":  { "type": "string" },
+                "amount":   { "type": "string" },
+                "risk":     { "type": "string", "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] },
+                "revokeUrl":{ "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "phishing-scan",
+      "category": "Agent Safety",
+      "price": "$0.10",
+      "description": "Scan URL, address, or @handle for phishing and scam indicators",
+      "inputSchema": {
+        "type": "object",
+        "required": ["target"],
+        "properties": {
+          "target": { "type": "string", "description": "URL, contract address, or @handle" }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "verdict":    { "type": "string", "enum": ["SAFE", "SUSPICIOUS", "PHISHING", "SCAM"] },
+          "riskScore":  { "type": "number" },
+          "indicators": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    {
+      "name": "mev-shield",
+      "category": "Agent Safety",
+      "price": "$0.30",
+      "description": "MEV sandwich attack risk before large swaps — protection strategies",
+      "inputSchema": {
+        "type": "object",
+        "required": ["action"],
+        "properties": {
+          "action": { "type": "string", "description": "Swap action description" },
+          "amount": { "type": "string", "description": "USD value of the swap" }
+        }
+      }
+    },
+    {
+      "name": "contract-trust",
+      "category": "Agent Safety",
+      "price": "$0.25",
+      "description": "Trust score for any contract — verified, audited, safe for agent interaction?",
+      "inputSchema": {
+        "type": "object",
+        "required": ["address"],
+        "properties": {
+          "address": { "type": "string", "description": "Contract address (0x...)" }
+        }
+      }
+    },
+    {
+      "name": "aml-screen",
+      "category": "Agent Safety",
+      "price": "$0.25",
+      "description": "AML compliance screening — CLEAN / SUSPICIOUS / HIGH_RISK",
+      "inputSchema": {
+        "type": "object",
+        "required": ["address"],
+        "properties": {
+          "address": { "type": "string", "description": "Wallet address (0x...)" }
+        }
+      }
+    },
+    {
+      "name": "circuit-breaker",
+      "category": "Agent Safety",
+      "price": "$0.50",
+      "description": "CONTINUE / PAUSE / HALT for autonomous agents and ZHC",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "agentId":           { "type": "string" },
+          "context":           { "type": "string" },
+          "recentLosses":      { "type": "string" },
+          "consecutiveBlocks": { "type": "string" }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "decision":          { "type": "string", "enum": ["CONTINUE", "PAUSE", "HALT"] },
+          "cooldownPeriod":    { "type": "string" },
+          "requiresHumanReview": { "type": "boolean" },
+          "reasoning":         { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "quantum",
+      "category": "Quantum Security",
+      "price": "$1.50",
+      "description": "Full quantum vulnerability report — exposure, threat level, migration steps",
+      "inputSchema": {
+        "type": "object",
+        "required": ["address"],
+        "properties": {
+          "address": { "type": "string", "description": "Wallet address (0x...)" }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "quantumRiskLevel":  { "type": "string", "enum": ["CRITICAL", "HIGH", "MEDIUM", "LOW", "MINIMAL"] },
+          "riskScore":         { "type": "number" },
+          "publicKeyExposed":  { "type": "boolean" },
+          "timeToMigrate":     { "type": "string" },
+          "migrationSteps":    { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    {
+      "name": "quantum-batch",
+      "category": "Quantum Security",
+      "price": "up to $2.50",
+      "description": "Batch quantum scan for 1–10 wallets at $0.25 each",
+      "inputSchema": {
+        "type": "object",
+        "required": ["addresses"],
+        "properties": {
+          "addresses": { "type": "string", "description": "Comma-separated addresses (max 10)" }
+        }
+      }
+    },
+    {
+      "name": "quantum-migrate",
+      "category": "Quantum Security",
+      "price": "$2.00",
+      "description": "Step-by-step quantum-safe migration plan",
+      "inputSchema": {
+        "type": "object",
+        "required": ["address"],
+        "properties": {
+          "address":      { "type": "string" },
+          "urgencyLevel": { "type": "string", "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] }
+        }
+      }
+    },
+    {
+      "name": "quantum-timeline",
+      "category": "Quantum Security",
+      "price": "$0.40",
+      "description": "Evidence-based quantum threat timeline 2026–2035",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "concern": { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "key-exposure",
+      "category": "Quantum Security",
+      "price": "$0.50",
+      "description": "Check if wallet public key is exposed on-chain — #1 quantum risk factor",
+      "inputSchema": {
+        "type": "object",
+        "required": ["address"],
+        "properties": {
+          "address": { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "analyze",
+      "category": "Research",
+      "price": "$0.35",
+      "description": "Deep due diligence for any Base token — risk score, rug probability, recommendation",
+      "inputSchema": {
+        "type": "object",
+        "required": ["projectName"],
+        "properties": {
+          "projectName": { "type": "string", "description": "Token ticker ($BRETT), name, or contract" }
+        }
+      }
+    },
+    {
+      "name": "tokenomics-score",
+      "category": "Research",
+      "price": "$0.50",
+      "description": "Supply, inflation, unlock cliff analysis — sustainability score",
+      "inputSchema": {
+        "type": "object",
+        "required": ["token"],
+        "properties": {
+          "token": { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "whitepaper-tldr",
+      "category": "Research",
+      "price": "$0.20",
+      "description": "Summarize whitepaper into 5 key bullets",
+      "inputSchema": {
+        "type": "object",
+        "required": ["url"],
+        "properties": {
+          "url":         { "type": "string" },
+          "projectName": { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "narrative-pulse",
+      "category": "Research",
+      "price": "$0.40",
+      "description": "Trending narratives in crypto and Base ecosystem",
+      "inputSchema": {
+        "type": "object",
+        "required": ["query"],
+        "properties": {
+          "query": { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "vc-tracker",
+      "category": "Research",
+      "price": "$1.00",
+      "description": "VC investment activity — hot sectors, thesis, signals",
+      "inputSchema": {
+        "type": "object",
+        "required": ["query"],
+        "properties": {
+          "query": { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "launch-advisor",
+      "category": "Research",
+      "price": "$3.00",
+      "description": "Full token launch playbook — tokenomics, 8-week timeline, KPIs",
+      "inputSchema": {
+        "type": "object",
+        "required": ["projectName"],
+        "properties": {
+          "projectName": { "type": "string" },
+          "description": { "type": "string" },
+          "targetRaise": { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "grant-evaluator",
+      "category": "Research",
+      "price": "$5.00",
+      "description": "Base ecosystem grant scoring — Fund/Decline recommendation",
+      "inputSchema": {
+        "type": "object",
+        "required": ["description"],
+        "properties": {
+          "description":     { "type": "string" },
+          "projectName":     { "type": "string" },
+          "requestedAmount": { "type": "string" },
+          "teamBackground":  { "type": "string" },
+          "milestones":      { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "x402-readiness",
+      "category": "Research",
+      "price": "$1.00",
+      "description": "Audit any API for x402 payment protocol readiness",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url":          { "type": "string" },
+          "description":  { "type": "string" },
+          "currentModel": { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "base-deploy-check",
+      "category": "Research",
+      "price": "$0.50",
+      "description": "Pre-deployment security check — vulnerabilities, centralization risks, go/no-go",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "contractCode": { "type": "string" },
+          "description":  { "type": "string" },
+          "projectName":  { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "pnl",
+      "category": "Data",
+      "price": "$1.00",
+      "description": "Wallet PnL report — win rate, realized gains, smart money score",
+      "inputSchema": {
+        "type": "object",
+        "required": ["address"],
+        "properties": {
+          "address": { "type": "string" },
+          "period":  { "type": "string", "enum": ["7d", "30d", "90d", "all"] }
+        }
+      }
+    },
+    {
+      "name": "whale-tracker",
+      "category": "Data",
+      "price": "$0.10",
+      "description": "Smart money flow — accumulation vs distribution signal",
+      "inputSchema": {
+        "type": "object",
+        "required": ["token"],
+        "properties": {
+          "token":        { "type": "string" },
+          "minAmountUSD": { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "dex-flow",
+      "category": "Data",
+      "price": "$0.15",
+      "description": "DEX buy/sell pressure — live DexScreener data",
+      "inputSchema": {
+        "type": "object",
+        "required": ["token"],
+        "properties": {
+          "token": { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "airdrop-check",
+      "category": "Data",
+      "price": "$0.10",
+      "description": "Base airdrop eligibility — protocols, activity score, estimated value",
+      "inputSchema": {
+        "type": "object",
+        "required": ["address"],
+        "properties": {
+          "address": { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "alert-check",
+      "category": "Data",
+      "price": "$0.10",
+      "description": "Check active alert triggers for any address",
+      "inputSchema": {
+        "type": "object",
+        "required": ["address"],
+        "properties": {
+          "address": { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "yield-optimizer",
+      "category": "Earn",
+      "price": "$0.15",
+      "description": "Best APY on Base DeFi — live DeFiLlama data, risk-adjusted",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "token":         { "type": "string" },
+          "riskTolerance": { "type": "string", "enum": ["LOW", "MEDIUM", "HIGH"] },
+          "minAPY":        { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "lp-analyzer",
+      "category": "Earn",
+      "price": "$0.25",
+      "description": "LP position analysis — impermanent loss, fee income, rebalance signal",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "positionId":     { "type": "string" },
+          "pool":           { "type": "string" },
+          "token0":         { "type": "string" },
+          "token1":         { "type": "string" },
+          "entryPrice":     { "type": "string" },
+          "investedAmount": { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "tax-report",
+      "category": "Earn",
+      "price": "$2.00",
+      "description": "On-chain tax summary — realized gains, taxable events, P&L",
+      "inputSchema": {
+        "type": "object",
+        "required": ["address"],
+        "properties": {
+          "address": { "type": "string" },
+          "year":    { "type": "string" },
+          "country": { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "alert-subscribe",
+      "category": "Earn",
+      "price": "$0.50",
+      "description": "Subscribe to real-time alerts via webhook — whale, circuit breaker, quantum",
+      "inputSchema": {
+        "type": "object",
+        "required": ["webhookUrl", "topics"],
+        "properties": {
+          "webhookUrl": { "type": "string" },
+          "topics":     { "type": "string", "description": "Comma-separated: whale_movement, circuit_breaker, quantum_exposure, honeypot_detected, rug_risk" },
+          "addresses":  { "type": "string", "description": "Comma-separated addresses to watch (optional)" }
+        }
+      }
+    }
+  ]
+}

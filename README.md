@@ -9,14 +9,58 @@ Built for AI agents, Zero-Human Companies (ZHC), and Base ecosystem builders.
 
 ---
 
+## For AI Agents — Choose Your Integration
+
+| I want to... | Use |
+|---|---|
+| Use BlueAgent tools inside **Claude Code or Claude Desktop** | [`@blueagent/skill`](#mcp-claude-code--cursor) MCP server |
+| Use BlueAgent tools inside **Cursor** | [`@blueagent/skill`](#mcp-claude-code--cursor) MCP server |
+| Call tools from **TypeScript/Node.js code** | [`@blueagent/sdk`](#sdk) |
+| Use with **Coinbase AgentKit** | [`@blueagent/agentkit`](#agentkit) |
+| Call via **HTTP** (any language) | [Direct x402 call](#direct-x402) |
+| Explore from **terminal** | [`@blueagent/cli`](#cli) |
+
+---
+
+## MCP — Claude Code & Cursor
+
+Install 31 tools in 2 commands. Works in Claude Code, Claude Desktop, and Cursor.
+
+```bash
+# Install MCP server
+npx @blueagent/skill install --claude    # Claude Code
+npx @blueagent/skill install --cursor    # Cursor
+npx @blueagent/skill install --desktop   # Claude Desktop
+npx @blueagent/skill install --all       # All editors at once
+
+# Set your Base wallet
+export WALLET_PRIVATE_KEY=0x<your_key>
+
+# Restart your editor → 31 tools ready
+```
+
+Then ask Claude naturally:
+
+```
+"Is 0x4200... a honeypot?"
+"Check my wallet for dangerous approvals"
+"What's the quantum risk for 0xabc...?"
+"Find me the best USDC yield on Base"
+"Should my agent pause after losing $340?"
+```
+
+Full setup guide: [docs/claude-code.md](docs/claude-code.md) · [docs/cursor.md](docs/cursor.md)
+
+---
+
 ## Ecosystem
 
 | Package | Description | Install |
 |---------|-------------|---------|
-| [`@blueagent/cli`](https://npmjs.com/package/@blueagent/cli) | Terminal CLI — 30 tools, TUI, natural language | `npm i -g @blueagent/cli` |
+| [`@blueagent/skill`](https://npmjs.com/package/@blueagent/skill) | MCP server — 31 tools for Claude Code, Claude Desktop, Cursor | `npx @blueagent/skill install --claude` |
 | [`@blueagent/sdk`](https://npmjs.com/package/@blueagent/sdk) | TypeScript SDK — namespaced methods | `npm i @blueagent/sdk` |
-| [`@blueagent/skill`](https://npmjs.com/package/@blueagent/skill) | MCP server — 25 tools for Claude Code | `npx @blueagent/skill install --claude` |
-| [`@blueagent/agentkit`](https://npmjs.com/package/@blueagent/agentkit) | Coinbase AgentKit plugin | `npm i @blueagent/agentkit` |
+| [`@blueagent/agentkit`](https://npmjs.com/package/@blueagent/agentkit) | Coinbase AgentKit plugin — 31 actions | `npm i @blueagent/agentkit` |
+| [`@blueagent/cli`](https://npmjs.com/package/@blueagent/cli) | Terminal CLI — TUI, natural language | `npm i -g @blueagent/cli` |
 
 ---
 
@@ -62,8 +106,39 @@ const agentkit = await AgentKit.from({
 ### MCP (Claude Code)
 ```bash
 npx @blueagent/skill install --claude
-# Restart Claude Code → 25 BlueAgent tools available
+# Restart Claude Code → 31 BlueAgent tools available
 ```
+
+### Direct x402
+
+No SDK — works from any language via HTTP:
+
+```typescript
+import { wrapFetchWithPayment } from 'x402-fetch'
+import { createWalletClient, http } from 'viem'
+import { privateKeyToAccount } from 'viem/accounts'
+import { base } from 'viem/chains'
+
+const BASE_URL = 'https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5'
+
+const wallet = createWalletClient({
+  account: privateKeyToAccount(process.env.WALLET_PRIVATE_KEY as `0x${string}`),
+  chain: base, transport: http(),
+})
+const paidFetch = wrapFetchWithPayment(fetch, wallet as any)
+
+// Discover all tools — FREE
+const tools = await fetch(`${BASE_URL}/discover`).then(r => r.json())
+
+// Call any tool
+const result = await paidFetch(`${BASE_URL}/honeypot-check`, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ token: '0xabcd...' }),
+}).then(r => r.json())
+```
+
+More examples: [`docs/examples/`](docs/examples/)
 
 ### Bankr CLI
 ```bash
@@ -170,6 +245,19 @@ bankr x402 deploy
 node scripts/inline-libs.js
 bankr x402 deploy
 ```
+
+---
+
+## Developer Docs
+
+| Doc | Description |
+|-----|-------------|
+| [`docs/claude-code.md`](docs/claude-code.md) | Full Claude Code MCP setup guide + all 31 tools |
+| [`docs/cursor.md`](docs/cursor.md) | Cursor MCP setup guide |
+| [`docs/mcp-tools.json`](docs/mcp-tools.json) | Machine-readable MCP tool schema (input/output for all 31 tools) |
+| [`docs/examples/sdk-basic.ts`](docs/examples/sdk-basic.ts) | SDK usage examples |
+| [`docs/examples/agentkit-safety.ts`](docs/examples/agentkit-safety.ts) | AgentKit safe agent pattern |
+| [`docs/examples/direct-x402.ts`](docs/examples/direct-x402.ts) | Direct HTTP x402 calls (no SDK) |
 
 ---
 
