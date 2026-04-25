@@ -4,6 +4,7 @@
   "description": "BlueAgent MCP server — 31 pay-per-use x402 tools for Claude Code, Claude Desktop, and Cursor",
   "type": "module",
   "main": "dist/src/index.js",
+  "files": ["dist/", "src/", "bin/", "README.md"],
   "bin": {
     "skill": "dist/src/index.js",
     "blueagent-skill": "dist/bin/install.js"
