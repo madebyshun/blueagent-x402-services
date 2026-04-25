@@ -12,7 +12,8 @@
     "build": "tsc",
     "start": "node dist/src/index.js",
     "install-claude": "node dist/bin/install.js --claude",
-    "install-cursor": "node dist/bin/install.js --cursor"
+    "install-cursor": "node dist/bin/install.js --cursor",
+    "prepublishOnly": "tsc"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
