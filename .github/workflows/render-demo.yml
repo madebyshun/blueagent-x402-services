@@ -1,7 +1,7 @@
 name: Render BlueAgent Demo Video
 
 on:
-  workflow_dispatch:  # chạy thủ công từ GitHub UI
+  workflow_dispatch:
 
 jobs:
   render:
@@ -15,17 +15,33 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Install dependencies
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y \
+            chromium-browser \
+            ffmpeg \
+            libnss3 \
+            libatk-bridge2.0-0 \
+            libdrm2 \
+            libxkbcommon0 \
+            libgbm1
+
+      - name: Install node dependencies
         working-directory: demo
         run: bun install
 
       - name: Render MP4
         working-directory: demo
-        run: bunx remotion render BlueAgentDemo out/demo.mp4 --log=verbose
+        run: |
+          bunx remotion render BlueAgentDemo out/demo.mp4 \
+            --browser-executable=$(which chromium-browser) \
+            --log=verbose \
+            --concurrency=2
 
-      - name: Upload video
+      - name: Upload video artifact
         uses: actions/upload-artifact@v4
         with:
           name: blueagent-demo
           path: demo/out/demo.mp4
-          retention-days: 7
+          retention-days: 30
