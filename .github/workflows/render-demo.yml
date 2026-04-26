@@ -5,7 +5,7 @@ on:
 
 jobs:
   render:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
         with:
@@ -15,17 +15,10 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Install system dependencies
+      - name: Install ffmpeg
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y \
-            chromium-browser \
-            ffmpeg \
-            libnss3 \
-            libatk-bridge2.0-0 \
-            libdrm2 \
-            libxkbcommon0 \
-            libgbm1
+          sudo apt-get install -y ffmpeg chromium-browser
 
       - name: Install node dependencies
         working-directory: demo
@@ -33,11 +26,13 @@ jobs:
 
       - name: Render MP4
         working-directory: demo
+        env:
+          CHROME_PATH: /usr/bin/chromium-browser
         run: |
           bunx remotion render BlueAgentDemo out/demo.mp4 \
-            --browser-executable=$(which chromium-browser) \
+            --browser-executable=/usr/bin/chromium-browser \
             --log=verbose \
-            --concurrency=2
+            --concurrency=1
 
       - name: Upload video artifact
         uses: actions/upload-artifact@v4
