@@ -1,0 +1,32 @@
+{
+  "name": "@blueagent/x402-guard",
+  "version": "1.0.0",
+  "description": "Security middleware for x402 payments — check before you pay",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": ["dist/", "src/", "README.md"],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "tsc"
+  },
+  "keywords": ["x402", "security", "blueagent", "web3", "ai-agents", "usdc", "base"],
+  "license": "MIT",
+  "dependencies": {
+    "x402-fetch": "^0.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.4.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/madebyshun/blueagent-x402-services"
+  }
+}
