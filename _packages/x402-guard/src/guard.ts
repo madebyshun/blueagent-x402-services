@@ -125,7 +125,7 @@ export class X402Guard {
     const { wrapFetchWithPayment } = await import('x402-fetch')
     const account = privateKeyToAccount(this.options.wallet as `0x${string}`)
     const walletClient = createWalletClient({ account, chain: base, transport: http() })
-    this.x402Fetch = wrapFetchWithPayment(fetch, walletClient as any)
+    this.x402Fetch = wrapFetchWithPayment(fetch, walletClient as any) as typeof fetch
     return this.x402Fetch
   }
 
