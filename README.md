@@ -5,7 +5,7 @@
 
 Built for AI agents, Zero-Human Companies (ZHC), and Base ecosystem builders.
 
-**Website:** https://blueagent-x402.vercel.app  
+**Website:** https://blueagent.dev  
 **Base URL:** `https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/`
 
 ---
@@ -137,6 +137,7 @@ Full setup guide: [docs/claude-code.md](docs/claude-code.md) · [docs/cursor.md]
 |---------|-------------|---------|
 | [`@blueagent/skill`](https://npmjs.com/package/@blueagent/skill) | MCP server — 31 tools for Claude Code, Claude Desktop, Cursor | `npx @blueagent/skill install --claude` |
 | [`@blueagent/sdk`](https://npmjs.com/package/@blueagent/sdk) | TypeScript SDK — namespaced methods | `npm i @blueagent/sdk` |
+| [`@blueagent/x402-guard`](https://npmjs.com/package/@blueagent/x402-guard) | Security middleware — check recipients before paying | `npm i @blueagent/x402-guard` |
 | [`@blueagent/agentkit`](https://npmjs.com/package/@blueagent/agentkit) | Coinbase AgentKit plugin — 31 actions | `npm i @blueagent/agentkit` |
 | [`@blueagent/cli`](https://npmjs.com/package/@blueagent/cli) | Terminal CLI — TUI, natural language | `npm i -g @blueagent/cli` |
 
@@ -283,7 +284,6 @@ bankr x402 call 0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/risk-gate \
 | `lp-analyzer` | $0.25 | LP position — impermanent loss, fee income, rebalance signal |
 | `tax-report` | $2.00 | On-chain tax summary — realized gains, taxable events |
 | `alert-subscribe` | $0.50 | Subscribe to whale/circuit-breaker alerts via webhook |
-| `alert-check` | $0.10 | Check active alert triggers for any address |
 
 ---
 
