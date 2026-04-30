@@ -1,0 +1,507 @@
+{
+  "name": "BlueAgent x402",
+  "description": "31 pay-per-use AI-agent tools on Base \u2014 security, quantum, research, data, and DeFi. Powered by x402 protocol.",
+  "url": "https://blueagent.dev",
+  "icon": "https://blueagent.dev/icon.png",
+  "network": "base",
+  "currency": "USDC",
+  "facilitator": "https://x402.bankr.bot/facilitator",
+  "services": [
+    {
+      "id": "quantum-premium",
+      "name": "Quantum Premium",
+      "category": "Quantum Security",
+      "description": "Quantum vulnerability score for any wallet \u2014 public key exposure, threat timeline, migration steps",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "1.50",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/quantum-premium",
+      "method": "POST"
+    },
+    {
+      "id": "quantum-batch",
+      "name": "Quantum Batch",
+      "category": "Quantum Security",
+      "description": "Batch quantum scan \u2014 1-10 wallets at $0.25 each. Pay only for what you scan.",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "2.50",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/quantum-batch",
+      "method": "POST"
+    },
+    {
+      "id": "quantum-migrate",
+      "name": "Quantum Migrate",
+      "category": "Quantum Security",
+      "description": "Step-by-step quantum-safe wallet migration plan \u2014 tools, timeline, priority actions",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "2.00",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/quantum-migrate",
+      "method": "POST"
+    },
+    {
+      "id": "quantum-timeline",
+      "name": "Quantum Timeline",
+      "category": "Quantum Security",
+      "description": "Quantum threat timeline \u2014 when CRQC arrives, milestone events, what it means for your wallet",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "0.40",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/quantum-timeline",
+      "method": "POST"
+    },
+    {
+      "id": "key-exposure",
+      "name": "Key Exposure",
+      "category": "Quantum Security",
+      "description": "Check if wallet's public key is exposed on-chain \u2014 the #1 quantum risk factor",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "0.50",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/key-exposure",
+      "method": "POST"
+    },
+    {
+      "id": "risk-gate",
+      "name": "Risk Gate",
+      "category": "Security",
+      "description": "Pre-transaction safety check for AI agents \u2014 APPROVE / WARN / BLOCK with risk score",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "0.05",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/risk-gate",
+      "method": "POST"
+    },
+    {
+      "id": "honeypot-check",
+      "name": "Honeypot Check",
+      "category": "Security",
+      "description": "Detect honeypot or rug pull token contracts before buying \u2014 SAFE / SUSPICIOUS / HONEYPOT verdict",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "0.05",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/honeypot-check",
+      "method": "POST"
+    },
+    {
+      "id": "allowance-audit",
+      "name": "Allowance Audit",
+      "category": "Security",
+      "description": "Audit dangerous token approvals \u2014 find unlimited approvals and revoke recommendations",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "0.20",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/allowance-audit",
+      "method": "POST"
+    },
+    {
+      "id": "phishing-scan",
+      "name": "Phishing Scan",
+      "category": "Security",
+      "description": "Scan URL, contract address, or social handle for phishing and scam indicators",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "0.10",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/phishing-scan",
+      "method": "POST"
+    },
+    {
+      "id": "mev-shield",
+      "name": "Mev Shield",
+      "category": "Security",
+      "description": "MEV sandwich attack risk before large swaps \u2014 protection strategies and recommended settings",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "0.30",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/mev-shield",
+      "method": "POST"
+    },
+    {
+      "id": "contract-trust",
+      "name": "Contract Trust",
+      "category": "Security",
+      "description": "Trust score for any contract \u2014 safe for AI agent interaction? Verified, audited, centralized?",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "0.25",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/contract-trust",
+      "method": "POST"
+    },
+    {
+      "id": "circuit-breaker",
+      "name": "Circuit Breaker",
+      "category": "Security",
+      "description": "Circuit breaker for autonomous agents \u2014 CONTINUE / PAUSE / HALT decision for Zero-Human Companies",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "0.50",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/circuit-breaker",
+      "method": "POST"
+    },
+    {
+      "id": "deep-analysis",
+      "name": "Deep Analysis",
+      "category": "Research & Intelligence",
+      "description": "Deep due diligence for any Base token or project \u2014 risk score, rug probability, recommendation",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "0.35",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/deep-analysis",
+      "method": "POST"
+    },
+    {
+      "id": "launch-advisor",
+      "name": "Launch Advisor",
+      "category": "Research & Intelligence",
+      "description": "Full token launch playbook \u2014 tokenomics, 8-week timeline, marketing strategy, KPIs",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "3.00",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/launch-advisor",
+      "method": "POST"
+    },
+    {
+      "id": "grant-evaluator",
+      "name": "Grant Evaluator",
+      "category": "Research & Intelligence",
+      "description": "Base ecosystem grant scoring \u2014 innovation, feasibility, impact, team quality",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "5.00",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/grant-evaluator",
+      "method": "POST"
+    },
+    {
+      "id": "x402-readiness",
+      "name": "X402 Readiness",
+      "category": "Research & Intelligence",
+      "description": "Audit any API or service for x402 payment protocol readiness \u2014 gaps, steps, pricing suggestion",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "1.00",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/x402-readiness",
+      "method": "POST"
+    },
+    {
+      "id": "base-deploy-check",
+      "name": "Base Deploy Check",
+      "category": "Research & Intelligence",
+      "description": "Pre-deployment security check for Base contracts \u2014 vulnerabilities, centralization risks, go/no-go",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "0.50",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/base-deploy-check",
+      "method": "POST"
+    },
+    {
+      "id": "wallet-pnl",
+      "name": "Wallet Pnl",
+      "category": "On-chain Data",
+      "description": "Wallet PnL report \u2014 trading style, win rate, smart money score, top tokens on Base",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "1.00",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/wallet-pnl",
+      "method": "POST"
+    },
+    {
+      "id": "whale-tracker",
+      "name": "Whale Tracker",
+      "category": "On-chain Data",
+      "description": "Smart money and whale flow analysis \u2014 accumulation vs distribution signal for any token",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "0.10",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/whale-tracker",
+      "method": "POST"
+    },
+    {
+      "id": "aml-screen",
+      "name": "Aml Screen",
+      "category": "On-chain Data",
+      "description": "AML compliance screening for any wallet \u2014 transaction patterns, risk flags, clean/suspicious verdict",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "0.25",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/aml-screen",
+      "method": "POST"
+    },
+    {
+      "id": "airdrop-check",
+      "name": "Airdrop Check",
+      "category": "On-chain Data",
+      "description": "Base airdrop eligibility check \u2014 which protocols, activity score, estimated value",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "0.10",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/airdrop-check",
+      "method": "POST"
+    },
+    {
+      "id": "narrative-pulse",
+      "name": "Narrative Pulse",
+      "category": "On-chain Data",
+      "description": "Trending narratives in crypto and Base ecosystem \u2014 momentum scores, emerging themes, agent opportunities",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "0.40",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/narrative-pulse",
+      "method": "POST"
+    },
+    {
+      "id": "dex-flow",
+      "name": "Dex Flow",
+      "category": "On-chain Data",
+      "description": "DEX volume, buy/sell pressure and liquidity flow for any Base token \u2014 live DexScreener data",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "0.15",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/dex-flow",
+      "method": "POST"
+    },
+    {
+      "id": "tokenomics-score",
+      "name": "Tokenomics Score",
+      "category": "Research & Intelligence",
+      "description": "Token supply, inflation, unlock cliff analysis \u2014 sustainability score and sell pressure outlook",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "0.50",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/tokenomics-score",
+      "method": "POST"
+    },
+    {
+      "id": "whitepaper-tldr",
+      "name": "Whitepaper Tldr",
+      "category": "Research & Intelligence",
+      "description": "Summarize any whitepaper or project docs into 5 key bullets \u2014 thesis, moat, token utility, risks",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "0.20",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/whitepaper-tldr",
+      "method": "POST"
+    },
+    {
+      "id": "vc-tracker",
+      "name": "Vc Tracker",
+      "category": "Research & Intelligence",
+      "description": "VC investment activity and thesis \u2014 who is backing what, hot sectors, signals for builders and traders",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "1.00",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/vc-tracker",
+      "method": "POST"
+    },
+    {
+      "id": "yield-optimizer",
+      "name": "Yield Optimizer",
+      "category": "Earn & DeFi",
+      "description": "Best APY opportunities on Base DeFi \u2014 live DeFiLlama data, risk-adjusted recommendations",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "0.15",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/yield-optimizer",
+      "method": "POST"
+    },
+    {
+      "id": "alert-subscribe",
+      "name": "Alert Subscribe",
+      "category": "Alerts",
+      "description": "Subscribe to real-time alerts via webhook \u2014 whale, circuit breaker, quantum exposure",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "0.50",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/alert-subscribe",
+      "method": "POST"
+    },
+    {
+      "id": "alert-check",
+      "name": "Alert Check",
+      "category": "Alerts",
+      "description": "Check active alert triggers for any address",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "0.10",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/alert-check",
+      "method": "POST"
+    },
+    {
+      "id": "lp-analyzer",
+      "name": "Lp Analyzer",
+      "category": "Earn & DeFi",
+      "description": "LP position analysis \u2014 impermanent loss, fee income, rebalance recommendation",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "0.25",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/lp-analyzer",
+      "method": "POST"
+    },
+    {
+      "id": "tax-report",
+      "name": "Tax Report",
+      "category": "Earn & DeFi",
+      "description": "On-chain tax summary \u2014 realized gains, taxable events, P&L",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "2.00",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/tax-report",
+      "method": "POST"
+    }
+  ]
+}

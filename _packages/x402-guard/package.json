@@ -19,6 +19,7 @@
   "keywords": ["x402", "security", "blueagent", "web3", "ai-agents", "usdc", "base"],
   "license": "MIT",
   "dependencies": {
+    "viem": "^2.0.0",
     "x402-fetch": "^0.3.0"
   },
   "devDependencies": {
