@@ -7,47 +7,51 @@ import { ToolRunner } from './components/ToolRunner.js'
 import { createWalletClient, http } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
 import { base } from 'viem/chains'
-import { wrapFetchWithPayment } from 'x402-fetch'
 
 type Screen = 'home' | 'tools' | 'runner'
 
 const BASE_URL = 'https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5'
 const WALLET_KEY = process.env.WALLET_PRIVATE_KEY ?? ''
 
-const CAIP2_TO_NETWORK: Record<string, string> = {
-  'eip155:8453': 'base',
+const CAIP2: Record<string, string> = {
+  'eip155:8453':  'base',
   'eip155:84532': 'base-sepolia',
-  'eip155:1': 'ethereum',
-  'eip155:137': 'polygon',
+  'eip155:1':     'ethereum',
+  'eip155:137':   'polygon',
 }
 
-function normalizeFetch(): typeof fetch {
-  return async (input, init) => {
-    const res = await fetch(input, init)
-    if (res.status !== 402) return res
-    try {
-      const body = await res.json()
-      if (Array.isArray(body.accepts)) {
-        body.accepts = body.accepts.map((req: any) => ({
-          ...req,
-          network: CAIP2_TO_NETWORK[req.network] ?? req.network,
-        }))
-      }
-      return new Response(JSON.stringify(body), {
-        status: 402,
-        headers: { 'Content-Type': 'application/json' },
-      })
-    } catch {
-      return res
-    }
-  }
-}
-
-function makePaidFetch() {
+async function paidCall(ep: string, body: Record<string, string>): Promise<unknown> {
   if (!WALLET_KEY) throw new Error('WALLET_PRIVATE_KEY not set')
+
   const account = privateKeyToAccount(WALLET_KEY as `0x${string}`)
   const wallet = createWalletClient({ account, chain: base, transport: http() })
-  return wrapFetchWithPayment(normalizeFetch(), wallet as any) as typeof fetch
+
+  const url = `${BASE_URL}/${ep}`
+  const opts: RequestInit = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }
+
+  const res1 = await fetch(url, opts)
+  if (res1.status !== 402) return res1.json()
+
+  const { x402Version, accepts } = await res1.json() as { x402Version: number; accepts: any[] }
+
+  const req = accepts
+    .map((a: any) => ({ ...a, network: CAIP2[a.network] ?? a.network }))
+    .find((a: any) => a.network === 'base')
+
+  if (!req) throw new Error('No Base (USDC) payment requirement found')
+
+  const { createPaymentHeader } = await import('x402/client' as any)
+  const paymentHeader = await createPaymentHeader(wallet as any, x402Version, req)
+
+  const res2 = await fetch(url, {
+    ...opts,
+    headers: { ...(opts.headers as Record<string, string>), 'X-PAYMENT': paymentHeader },
+  })
+  return res2.json()
 }
 
 export function App() {
@@ -64,12 +68,7 @@ export function App() {
     setResult(null)
     setError(null)
     try {
-      const paidFetch = makePaidFetch()
-      const res = await paidFetch(`${BASE_URL}/${ep}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      }).then(r => r.json())
+      const res = await paidCall(ep, body)
       setResult(res)
     } catch (e) {
       setError((e as Error).message)
