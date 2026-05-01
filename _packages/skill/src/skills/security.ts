@@ -121,6 +121,24 @@ export const securitySkills: SkillDef[] = [
   },
 
   {
+    name: 'agent-payload-inspector',
+    category: 'safety',
+    description: 'Detect prompt injection attacks in any payload an AI agent is about to process — web scrapes, API responses, user messages, tool outputs. Returns SAFE / SUSPICIOUS / INJECTION with injection type classification.',
+    priceUSD: 0.10,
+    endpoint: 'agent-payload-inspector',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        payload: { type: 'string', description: 'Text or JSON to inspect for injection attacks (max 50,000 chars)' },
+        context: { type: 'string', description: 'What the agent is doing — improves detection accuracy (optional)' },
+        agentId: { type: 'string', description: 'Agent identifier for audit trail (optional)' },
+      },
+      required: ['payload'],
+    },
+    buildBody: ({ payload, context, agentId }) => ({ payload, context, agentId }),
+  },
+
+  {
     name: 'circuit-breaker',
     category: 'safety',
     description: 'CONTINUE / PAUSE / HALT decision for autonomous agents. Call when consecutive losses or anomalies detected.',

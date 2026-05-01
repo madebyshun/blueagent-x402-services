@@ -13,6 +13,7 @@ const TOOLS: Record<Category, Array<{ label: string; value: string; params: stri
     { label: 'mev-shield        MEV sandwich risk before swap', value: 'mev-shield', params: ['action'], price: '$0.30' },
     { label: 'contract-trust    Trust score for any contract', value: 'contract-trust', params: ['address'], price: '$0.25' },
     { label: 'aml-screen        AML compliance screening', value: 'aml-screen', params: ['address'], price: '$0.25' },
+    { label: 'payload-inspector  Detect prompt injection in payloads', value: 'agent-payload-inspector', params: ['payload', 'context?'], price: '$0.10' },
     { label: 'circuit-breaker   CONTINUE/PAUSE/HALT for agents', value: 'circuit-breaker', params: ['context?', 'recentLosses?'], price: '$0.50' },
     { label: 'quantum-premium   Full quantum vulnerability report', value: 'quantum-premium', params: ['address'], price: '$1.50' },
     { label: 'key-exposure      Check if public key exposed on-chain', value: 'key-exposure', params: ['address'], price: '$0.50' },

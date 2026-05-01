@@ -1,6 +1,6 @@
 {
   "name": "BlueAgent x402",
-  "description": "31 pay-per-use AI-agent tools on Base \u2014 security, quantum, research, data, and DeFi. Powered by x402 protocol.",
+  "description": "32 pay-per-use AI-agent tools on Base \u2014 security, quantum, research, data, and DeFi. Powered by x402 protocol.",
   "url": "https://blueagent.dev",
   "icon": "https://blueagent.dev/icon.png",
   "network": "base",
@@ -501,6 +501,22 @@
       "facilitator": "https://x402.bankr.bot/facilitator",
       "price": "2.00",
       "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/tax-report",
+      "method": "POST"
+    },
+    {
+      "id": "agent-payload-inspector",
+      "name": "Agent Payload Inspector",
+      "category": "Agent Safety",
+      "description": "Detect prompt injection attacks in AI agent payloads — SAFE / SUSPICIOUS / INJECTION verdict with injection type classification",
+      "url": "https://blueagent.dev",
+      "x402Version": "1",
+      "networks": [
+        "base"
+      ],
+      "currency": "USDC",
+      "facilitator": "https://x402.bankr.bot/facilitator",
+      "price": "0.10",
+      "endpoint": "https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/agent-payload-inspector",
       "method": "POST"
     }
   ]

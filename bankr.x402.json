@@ -1195,6 +1195,63 @@
           ]
         }
       }
+    },
+    "agent-payload-inspector": {
+      "category": "safety",
+      "price": "0.10",
+      "description": "Detect prompt injection attacks in AI agent payloads — SAFE / SUSPICIOUS / INJECTION verdict with injection type classification",
+      "schema": {
+        "input": {
+          "type": "object",
+          "properties": {
+            "payload": {
+              "type": "string",
+              "description": "Text or JSON payload to inspect for injection attacks"
+            },
+            "context": {
+              "type": "string",
+              "description": "What the agent is doing (helps improve detection accuracy)"
+            },
+            "agentId": {
+              "type": "string",
+              "description": "Agent identifier for audit trail"
+            }
+          },
+          "required": ["payload"]
+        },
+        "output": {
+          "type": "object",
+          "properties": {
+            "verdict": {
+              "type": "string",
+              "description": "SAFE | SUSPICIOUS | INJECTION"
+            },
+            "confidence": {
+              "type": "number",
+              "description": "Confidence score 0-100"
+            },
+            "injectionTypes": {
+              "type": "array",
+              "description": "Types detected: DIRECT_INJECTION, INDIRECT_INJECTION, GOAL_HIJACKING, CONTEXT_MANIPULATION, JAILBREAK, EXFILTRATION, CHAIN_ATTACK, MARKDOWN_INJECTION"
+            },
+            "severity": {
+              "type": "string",
+              "description": "NONE | LOW | MEDIUM | HIGH | CRITICAL"
+            },
+            "indicators": {
+              "type": "array",
+              "description": "Specific text patterns that triggered detection"
+            },
+            "cleanPayload": {
+              "type": "string",
+              "description": "Sanitized payload with injections removed, or null if clean"
+            },
+            "recommendation": {
+              "type": "string"
+            }
+          }
+        }
+      }
     }
   }
 }

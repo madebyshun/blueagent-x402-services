@@ -1,6 +1,6 @@
 # BlueAgent x402 Services
 
-> **Security OS for Autonomous Agents on Base** — 31 pay-per-use AI tools via x402 protocol.
+> **Security OS for Autonomous Agents on Base** — 32 pay-per-use AI tools via x402 protocol.
 > No subscription. No API key. Pay USDC per call.
 
 Built for AI agents, Zero-Human Companies (ZHC), and Base ecosystem builders.
@@ -25,7 +25,7 @@ Built for AI agents, Zero-Human Companies (ZHC), and Base ecosystem builders.
 
 ## MCP — Claude Code & Cursor
 
-31 tools, 3 steps. Works in Claude Code CLI, Claude Desktop, and Cursor.
+32 tools, 3 steps. Works in Claude Code CLI, Claude Desktop, and Cursor.
 
 ### Step 1 — Run the installer
 
@@ -65,7 +65,7 @@ node -e "const {generatePrivateKey} = require('viem/accounts'); console.log(gene
 
 Close and reopen Claude Code / Claude Desktop / Cursor.
 
-Then type `/mcp` — you should see **blueagent** with status **connected** and 31 tools.
+Then type `/mcp` — you should see **blueagent** with status **connected** and 32 tools.
 
 ### Verify it's working
 
@@ -135,10 +135,10 @@ Full setup guide: [docs/claude-code.md](docs/claude-code.md) · [docs/cursor.md]
 
 | Package | Description | Install |
 |---------|-------------|---------|
-| [`@blueagent/skill`](https://npmjs.com/package/@blueagent/skill) | MCP server — 31 tools for Claude Code, Claude Desktop, Cursor | `npx @blueagent/skill install --claude` |
+| [`@blueagent/skill`](https://npmjs.com/package/@blueagent/skill) | MCP server — 32 tools for Claude Code, Claude Desktop, Cursor | `npx @blueagent/skill install --claude` |
 | [`@blueagent/sdk`](https://npmjs.com/package/@blueagent/sdk) | TypeScript SDK — namespaced methods | `npm i @blueagent/sdk` |
 | [`@blueagent/x402-guard`](https://npmjs.com/package/@blueagent/x402-guard) | Security middleware — check recipients before paying | `npm i @blueagent/x402-guard` |
-| [`@blueagent/agentkit`](https://npmjs.com/package/@blueagent/agentkit) | Coinbase AgentKit plugin — 31 actions | `npm i @blueagent/agentkit` |
+| [`@blueagent/agentkit`](https://npmjs.com/package/@blueagent/agentkit) | Coinbase AgentKit plugin — 32 actions | `npm i @blueagent/agentkit` |
 | [`@blueagent/cli`](https://npmjs.com/package/@blueagent/cli) | Terminal CLI — TUI, natural language | `npm i -g @blueagent/cli` |
 
 ---
@@ -185,7 +185,7 @@ const agentkit = await AgentKit.from({
 ### MCP (Claude Code)
 ```bash
 npx @blueagent/skill install --claude
-# Restart Claude Code → 31 BlueAgent tools available
+# Restart Claude Code → 32 BlueAgent tools available
 ```
 
 ### Direct x402
@@ -251,6 +251,7 @@ bankr x402 call 0xf31f59e7b8b58555f7871f71973a394c8f1bffe5/risk-gate \
 | `contract-trust` | $0.25 | Trust score — verified, audited, safe for agent interaction? |
 | `aml-screen` | $0.25 | AML compliance — CLEAN / SUSPICIOUS / HIGH_RISK |
 | `circuit-breaker` | $0.50 | CONTINUE / PAUSE / HALT for autonomous agents and ZHC |
+| `agent-payload-inspector` | $0.10 | Detect prompt injection in AI agent payloads — SAFE / SUSPICIOUS / INJECTION |
 
 ### Research
 

@@ -49,6 +49,9 @@ class SecuritySDK {
   amlScreen(p: { address: string }) {
     return this.c('aml-screen', { ...p, chain: 'base' })
   }
+  agentPayloadInspector(p: { payload: string; context?: string; agentId?: string }) {
+    return this.c('agent-payload-inspector', p)
+  }
   circuitBreaker(p: { agentId?: string; action?: string; context?: string; recentLosses?: string; consecutiveBlocks?: number }) {
     return this.c('circuit-breaker', p)
   }
