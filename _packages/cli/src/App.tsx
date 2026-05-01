@@ -14,11 +14,40 @@ type Screen = 'home' | 'tools' | 'runner'
 const BASE_URL = 'https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5'
 const WALLET_KEY = process.env.WALLET_PRIVATE_KEY ?? ''
 
+const CAIP2_TO_NETWORK: Record<string, string> = {
+  'eip155:8453': 'base',
+  'eip155:84532': 'base-sepolia',
+  'eip155:1': 'ethereum',
+  'eip155:137': 'polygon',
+}
+
+function normalizeFetch(): typeof fetch {
+  return async (input, init) => {
+    const res = await fetch(input, init)
+    if (res.status !== 402) return res
+    try {
+      const body = await res.json()
+      if (Array.isArray(body.accepts)) {
+        body.accepts = body.accepts.map((req: any) => ({
+          ...req,
+          network: CAIP2_TO_NETWORK[req.network] ?? req.network,
+        }))
+      }
+      return new Response(JSON.stringify(body), {
+        status: 402,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    } catch {
+      return res
+    }
+  }
+}
+
 function makePaidFetch() {
   if (!WALLET_KEY) throw new Error('WALLET_PRIVATE_KEY not set')
   const account = privateKeyToAccount(WALLET_KEY as `0x${string}`)
   const wallet = createWalletClient({ account, chain: base, transport: http() })
-  return wrapFetchWithPayment(fetch, wallet as any) as typeof fetch
+  return wrapFetchWithPayment(normalizeFetch(), wallet as any) as typeof fetch
 }
 
 export function App() {
