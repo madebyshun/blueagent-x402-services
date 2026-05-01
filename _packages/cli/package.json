@@ -14,11 +14,12 @@
     "prepublishOnly": "tsc"
   },
   "dependencies": {
-    "@blueagent/sdk": "^1.0.0",
     "ink": "^5.0.0",
     "ink-select-input": "^6.0.0",
     "ink-text-input": "^6.0.0",
-    "react": "^18.0.0"
+    "react": "^18.0.0",
+    "viem": "^2.0.0",
+    "x402-fetch": "^1.1.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
