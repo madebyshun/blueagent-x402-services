@@ -12,7 +12,7 @@ export const CATEGORY_COLOR: Record<Category, string> = {
 }
 
 const ITEMS = [
-  { label: '  Security   12 tools   agent safety, quantum, AML', value: 'security' as Category },
+  { label: '  Security   13 tools   agent safety, quantum, AML', value: 'security' as Category },
   { label: '  Research    9 tools   due diligence, grants, x402 audit', value: 'research' as Category },
   { label: '  Data        4 tools   PnL, whale flow, DEX pressure', value: 'data' as Category },
   { label: '  Earn        4 tools   yield, airdrop, LP, tax', value: 'earn' as Category },
