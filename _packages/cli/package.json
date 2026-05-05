@@ -4,7 +4,11 @@
   "description": "BlueAgent TUI — terminal UI for 32 x402 security and research tools",
   "type": "module",
   "main": "dist/index.js",
-  "files": ["dist/", "src/", "README.md"],
+  "files": [
+    "dist/",
+    "src/",
+    "README.md"
+  ],
   "bin": {
     "blueagent": "dist/index.js"
   },
@@ -14,6 +18,8 @@
     "prepublishOnly": "tsc"
   },
   "dependencies": {
+    "@x402/evm": "^2.11.0",
+    "@x402/fetch": "^2.11.0",
     "ink": "^5.0.0",
     "ink-select-input": "^6.0.0",
     "ink-text-input": "^6.0.0",
@@ -25,10 +31,17 @@
   "devDependencies": {
     "@types/node": "^20.0.0",
     "@types/react": "^18.0.0",
-    "typescript": "^5.4.0",
-    "tsx": "^4.0.0"
+    "tsx": "^4.0.0",
+    "typescript": "^5.4.0"
   },
-  "keywords": ["blueagent", "cli", "tui", "x402", "base", "security"],
+  "keywords": [
+    "blueagent",
+    "cli",
+    "tui",
+    "x402",
+    "base",
+    "security"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",

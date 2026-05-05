@@ -1,7 +1,6 @@
-import { createWalletClient, http } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
-import { base } from 'viem/chains'
-import { wrapFetchWithPayment } from 'x402-fetch'
+import { wrapFetchWithPayment, x402Client } from '@x402/fetch'
+import { ExactEvmScheme } from '@x402/evm'
 
 const BASE_URL = 'https://x402.bankr.bot/0xf31f59e7b8b58555f7871f71973a394c8f1bffe5'
 
@@ -9,8 +8,10 @@ type Caller = (endpoint: string, body: Record<string, unknown>) => Promise<any>
 
 function makeCaller(privateKey: string): Caller {
   const account = privateKeyToAccount(privateKey as `0x${string}`)
-  const wallet = createWalletClient({ account, chain: base, transport: http() })
-  const paidFetch = wrapFetchWithPayment(fetch, wallet as any)
+  const client = x402Client.fromConfig({
+    schemes: [{ network: 'eip155:8453', client: new ExactEvmScheme(account as any) }],
+  })
+  const paidFetch = wrapFetchWithPayment(fetch, client) as typeof fetch
 
   return async (endpoint, body) => {
     const res = await paidFetch(`${BASE_URL}/${endpoint}`, {

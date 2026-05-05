@@ -1,6 +1,6 @@
-import { createWalletClient, http } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
-import { base } from 'viem/chains'
+import { wrapFetchWithPayment, x402Client } from '@x402/fetch'
+import { ExactEvmScheme } from '@x402/evm'
 import type { CheckName, CheckResult, GuardResult, Verdict, X402GuardOptions } from './types.js'
 import { X402GuardError } from './types.js'
 
@@ -122,10 +122,11 @@ export class X402Guard {
 
   private async getFetch(): Promise<typeof fetch> {
     if (this.x402Fetch) return this.x402Fetch
-    const { wrapFetchWithPayment } = await import('x402-fetch')
     const account = privateKeyToAccount(this.options.wallet as `0x${string}`)
-    const walletClient = createWalletClient({ account, chain: base, transport: http() })
-    this.x402Fetch = wrapFetchWithPayment(fetch, walletClient as any) as typeof fetch
+    const client = x402Client.fromConfig({
+      schemes: [{ network: 'eip155:8453', client: new ExactEvmScheme(account as any) }],
+    })
+    this.x402Fetch = wrapFetchWithPayment(fetch, client) as typeof fetch
     return this.x402Fetch
   }
 
