@@ -1126,12 +1126,59 @@
     "alert-subscribe": {
       "price": "0.50",
       "category": "alerts",
-      "description": "Subscribe to real-time alerts via webhook — whale, circuit breaker, quantum exposure"
+      "description": "Subscribe to real-time alerts via webhook — whale, circuit breaker, quantum exposure",
+      "schema": {
+        "input": {
+          "type": "object",
+          "properties": {
+            "webhookUrl": { "type": "string", "description": "HTTPS webhook URL to receive alert events" },
+            "topics": {
+              "type": "array",
+              "items": { "type": "string", "enum": ["whale_movement", "circuit_breaker", "quantum_exposure", "honeypot_detected", "rug_risk"] },
+              "description": "Alert topics to subscribe to"
+            },
+            "addresses": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Specific wallet/token addresses to watch (optional — empty = global alerts)"
+            }
+          },
+          "required": ["webhookUrl", "topics"]
+        },
+        "output": {
+          "type": "object",
+          "properties": {
+            "subscriptionId": { "type": "string", "description": "Unique subscription identifier" },
+            "topics": { "type": "array", "description": "Active alert topics" },
+            "webhookUrl": { "type": "string" },
+            "status": { "type": "string", "description": "ACTIVE | PENDING" },
+            "expiresAt": { "type": "string", "description": "ISO timestamp when subscription expires" }
+          }
+        }
+      }
     },
     "alert-check": {
       "price": "0.10",
       "category": "alerts",
-      "description": "Check active alert triggers for any address"
+      "description": "Check active alert triggers for any address",
+      "schema": {
+        "input": {
+          "type": "object",
+          "properties": {
+            "address": { "type": "string", "description": "Wallet or token address to check for active alerts (0x...)" }
+          },
+          "required": ["address"]
+        },
+        "output": {
+          "type": "object",
+          "properties": {
+            "address": { "type": "string" },
+            "hasAlerts": { "type": "boolean" },
+            "alerts": { "type": "array", "description": "Active alert objects with type, severity, message" },
+            "lastChecked": { "type": "string", "description": "ISO timestamp of last alert check" }
+          }
+        }
+      }
     },
     "lp-analyzer": {
       "price": "0.25",

@@ -33,6 +33,7 @@ export const earnSkills: SkillDef[] = [
     inputSchema: {
       type: 'object',
       properties: {
+        address:        { type: 'string', description: 'Wallet address holding the LP position (0x...)' },
         positionId:     { type: 'string', description: 'Uniswap v3 LP NFT position ID (optional)' },
         pool:           { type: 'string', description: 'Pool contract address (optional)' },
         token0:         { type: 'string', description: 'First token symbol or address (optional)' },
@@ -40,9 +41,10 @@ export const earnSkills: SkillDef[] = [
         entryPrice:     { type: 'string', description: 'Price when position was opened (optional)' },
         investedAmount: { type: 'string', description: 'Total USD invested (optional)' },
       },
+      required: ['address'],
     },
-    buildBody: ({ positionId, pool, token0, token1, entryPrice, investedAmount }) => ({
-      positionId, pool, token0, token1, entryPrice, investedAmount,
+    buildBody: ({ address, positionId, pool, token0, token1, entryPrice, investedAmount }) => ({
+      address, positionId, pool, token0, token1, entryPrice, investedAmount, chain: 'base',
     }),
   },
 

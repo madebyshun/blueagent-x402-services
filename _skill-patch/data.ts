@@ -49,19 +49,34 @@ export const dataSkills: SkillDef[] = [
     buildBody: ({ token }) => ({ token, chain: 'base' }),
   },
   {
-    name: 'unlock-alert',
+    name: 'airdrop-check',
     category: 'data',
-    description: 'Upcoming token unlock events — dates, amounts, sell pressure risk, cliff vs linear vesting breakdown.',
-    priceUSD: 0.20,
-    endpoint: 'unlock-alert',
+    description: 'Base airdrop eligibility — which protocols qualify, on-chain activity score, estimated total airdrop value.',
+    priceUSD: 0.10,
+    endpoint: 'airdrop-check',
     inputSchema: {
       type: 'object',
       properties: {
-        token: { type: 'string', description: 'Token name, ticker, or contract address' },
-        days: { type: 'number', description: 'Look-ahead window in days (default: 30)' },
+        address: { type: 'string', description: 'Wallet address to check (0x...)' },
       },
-      required: ['token'],
+      required: ['address'],
     },
-    buildBody: ({ token, days = 30 }) => ({ token, days }),
+    buildBody: ({ address }) => ({ address, chain: 'base' }),
+  },
+
+  {
+    name: 'alert-check',
+    category: 'data',
+    description: 'Check active alert triggers for any address — whale movements, circuit breaker signals, quantum exposure events.',
+    priceUSD: 0.10,
+    endpoint: 'alert-check',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        address: { type: 'string', description: 'Wallet or token address to check alerts for (0x...)' },
+      },
+      required: ['address'],
+    },
+    buildBody: ({ address }) => ({ address }),
   },
 ]

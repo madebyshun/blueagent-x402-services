@@ -61,5 +61,5 @@ npx @blueagent/skill install --claude
 # Set wallet
 export WALLET_PRIVATE_KEY=0x...
 
-# Restart Claude Code → 25 tools appear automatically
+# Restart Claude Code → 31 tools appear automatically
 ```

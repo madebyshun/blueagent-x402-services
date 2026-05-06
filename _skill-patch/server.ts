@@ -15,7 +15,7 @@ const ALL_SKILLS = [
 ]
 
 const server = new Server(
-  { name: 'blueagent-skill', version: '1.0.0' },
+  { name: 'blueagent', version: '1.1.0' },
   { capabilities: { tools: {} } },
 )
 

@@ -23,21 +23,6 @@ export const earnSkills: SkillDef[] = [
     }),
   },
   {
-    name: 'airdrop-check',
-    category: 'earn',
-    description: 'Base airdrop eligibility — which protocols qualify, on-chain activity score, estimated airdrop value.',
-    priceUSD: 0.10,
-    endpoint: 'airdrop-check',
-    inputSchema: {
-      type: 'object',
-      properties: {
-        address: { type: 'string', description: 'Wallet address to check (0x...)' },
-      },
-      required: ['address'],
-    },
-    buildBody: ({ address }) => ({ address, chain: 'base' }),
-  },
-  {
     name: 'lp-analyzer',
     category: 'earn',
     description: 'LP position analysis — impermanent loss estimate, fee income, net PnL, rebalance recommendation.',
@@ -73,6 +58,36 @@ export const earnSkills: SkillDef[] = [
       year,
       country,
       chain: 'base',
+    }),
+  },
+
+  {
+    name: 'alert-subscribe',
+    category: 'earn',
+    description: 'Subscribe to real-time BlueAgent alerts via webhook — whale movements, circuit breaker events, quantum exposure.',
+    priceUSD: 0.50,
+    endpoint: 'alert-subscribe',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        webhookUrl: { type: 'string', description: 'HTTPS webhook URL to receive alerts' },
+        topics: {
+          type: 'string',
+          description: 'Comma-separated alert topics: whale_movement, circuit_breaker, quantum_exposure, honeypot_detected, rug_risk',
+        },
+        addresses: {
+          type: 'string',
+          description: 'Comma-separated addresses to watch (optional — leave empty for global alerts)',
+        },
+      },
+      required: ['webhookUrl', 'topics'],
+    },
+    buildBody: ({ webhookUrl, topics, addresses }) => ({
+      webhookUrl,
+      topics: Array.isArray(topics) ? topics : String(topics).split(',').map((t: string) => t.trim()),
+      addresses: addresses
+        ? (Array.isArray(addresses) ? addresses : String(addresses).split(',').map((a: string) => a.trim()))
+        : [],
     }),
   },
 ]
