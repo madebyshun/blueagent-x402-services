@@ -31,8 +31,8 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@x402/evm": "^2.11.0",
-    "@x402/fetch": "^2.11.0",
+    "@x402/evm": "^2.12.0",
+    "@x402/fetch": "^2.12.0",
     "viem": "^2.0.0"
   },
   "devDependencies": {
